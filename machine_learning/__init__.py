@@ -1,0 +1,1 @@
+# this is for Gregory and Costa, add all mashine learning stuff to this folder to keep track
