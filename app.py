@@ -59,7 +59,7 @@ def provider_dashboard():
 
 # Filtering
 # FROM FRONTEND: POST (criteria)
-# TO FRONTEND: dashboard.html, matchings
+# TO FRONTEND: customer_dashboard.html, matchings
 @app.route('/filtering', methods=['POST'])
 def filtering():
     # check the validity of the session
@@ -71,7 +71,7 @@ def filtering():
 
 # Matches
 # FROM FRONTEND: POST (offer_id)
-# TO FRONTEND: dashboard.html, matchings, matched_contact
+# TO FRONTEND: customer_dashboard.html, matchings, matched_contact
 @app.route('/matches', methods=['POST'])
 def matches():
     # check the validity of the session
