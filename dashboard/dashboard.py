@@ -70,7 +70,7 @@ def filtering_1(user_id, request):
         # ...
     ]
 
-    return render_template('/dashboard.html', matchings=matchings)
+    return render_template('/customer_dashboard.html', matchings=matchings)
 
 # the matching function
 def matches_1(user_id, request):
