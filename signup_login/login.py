@@ -24,7 +24,10 @@ def login_1(request):
                 # set the session id for this user
                 session['user_id'] = user.id
                 # go to the next page (now logged in)
-                return redirect('/stripe_checkout')
+                if user.type:
+                    return redirect('/provider_dashboard')
+                else:
+                    return redirect('/customer_dashboard')
 
         # if the password is not valid or there is no such user account, return a warning, return to the login page
         is_invalid = True
