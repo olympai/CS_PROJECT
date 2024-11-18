@@ -15,7 +15,6 @@
 </head>
 
 <body>
-    
     <!-- Header Section -->
     <header class="header">
         <div class="container">
@@ -31,8 +30,7 @@
             <div class="row">
                 <div class="col-md-4">
                     <label for="min_sq_meters" class="form-label">Minimum Square Meters</label>
-                    <input type="number" class="form-control" id="min_sq_meters" name="min_sq_meters" placeholder="e.g., 20"
-                        min="0">
+                    <input type="number" class="form-control" id="min_sq_meters" name="min_sq_meters" placeholder="e.g., 20" min="0">
                 </div>
                 <div class="col-md-4">
                     <label for="distance_to_uni" class="form-label">Distance to University (km)</label>
@@ -41,8 +39,7 @@
                 </div>
                 <div class="col-md-4">
                     <label for="max_price" class="form-label">Maximum Price (€)</label>
-                    <input type="number" class="form-control" id="max_price" name="max_price" placeholder="e.g., 500"
-                        min="0">
+                    <input type="number" class="form-control" id="max_price" name="max_price" placeholder="e.g., 500" min="0">
                 </div>
             </div>
             <div class="text-center mt-4">
@@ -73,7 +70,7 @@
                     {% endfor %}
                 </ul>
                 <!-- Apply Button -->
-                <button class="apply-btn" data-bs-toggle="modal" data-bs-target="#applyModal" 
+                <button class="apply-btn btn btn-success" data-bs-toggle="modal" data-bs-target="#applyModal" 
                     data-provider="{{ property.provider.name }}" 
                     data-id="{{ property.id }}">
                     Apply
@@ -92,14 +89,14 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p id="modal-message"></p>
+                    <p id="modal-message">Loading...</p>
                     <p>Your contact details (email and phone number) will be shared with the provider.</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                     <form id="applyForm" method="post" action="/matches">
                         <input type="hidden" name="offer_id" id="offer_id">
-                        <button type="submit" class="btn btn-confirm">Confirm Application</button>
+                        <button type="submit" class="btn btn-success">Confirm Application</button>
                     </form>
                 </div>
             </div>
@@ -117,17 +114,28 @@
 
     <!-- Custom JavaScript for Modal -->
     <script>
-        const applyModal = document.getElementById('applyModal');
-        applyModal.addEventListener('show.bs.modal', function (event) {
-            const button = event.relatedTarget;
-            const providerName = button.getAttribute('data-provider');
-            const offerId = button.getAttribute('data-id');
+        document.addEventListener("DOMContentLoaded", function () {
+            const applyModal = document.getElementById("applyModal");
+            if (applyModal) {
+                applyModal.addEventListener("show.bs.modal", function (event) {
+                    const button = event.relatedTarget; // Button that triggered the modal
+                    if (button) {
+                        const providerName = button.getAttribute("data-provider");
+                        const offerId = button.getAttribute("data-id");
 
-            const modalMessage = document.getElementById('modal-message');
-            modalMessage.textContent = `Are you sure you want to apply for this apartment? ${providerName} will receive your contact details and will get in touch with you.`;
+                        // Update modal content
+                        const modalMessage = document.getElementById("modal-message");
+                        if (modalMessage) {
+                            modalMessage.textContent = `Are you sure you want to apply for this apartment? ${providerName} will receive your contact details and will get in touch with you.`;
+                        }
 
-            const offerInput = document.getElementById('offer_id');
-            offerInput.value = offerId;
+                        const offerInput = document.getElementById("offer_id");
+                        if (offerInput) {
+                            offerInput.value = offerId;
+                        }
+                    }
+                });
+            }
         });
     </script>
 </body>
