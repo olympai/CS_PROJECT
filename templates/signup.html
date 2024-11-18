@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roomee - Sign Up</title>
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link rel="stylesheet" href="../static/css/styles.css">
+    <!-- Custom Styles -->
+    <style>
+        body {
+            background-color: #ffffff; /* Dominantly white */
+        }
+
+        .container {
+            max-width: 700px;
+            margin-top: 50px;
+            padding: 30px;
+            border: 2px solid #008542; /* St. Gallen green */
+            border-radius: 10px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #008542; /* St. Gallen green */
+        }
+
+        label {
+            color: #008542; /* Labels in green */
+        }
+
+        .btn-green {
+            background-color: #008542; /* St. Gallen green */
+            color: white;
+        }
+
+        .btn-green:hover {
+            background-color: #006838;
+        }
+
+        .form-section {
+            margin-top: 20px;
+            border-top: 2px solid #008542;
+            padding-top: 15px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2 class="text-center">Sign Up</h2>
+
+        <!-- Display error messages ONLY if there is an actual error -->
+        {% if error %}
+        <div class="alert alert-danger" role="alert">
+            {{ error }}
+        </div>
+        {% endif %}
+
+        <!-- Sign-Up Form -->
+        <form method="POST" action="/signup">
+            <!-- Basic Information -->
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" name="password" placeholder="Enter a password"
+                    required>
+            </div>
+
+            <div class="mb-3">
+                <label for="password_confirmation" class="form-label">Confirm Password</label>
+                <input type="password" class="form-control" id="password_confirmation" name="password_confirmation"
+                    placeholder="Re-enter your password" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="type" class="form-label">I am:</label>
+                <select class="form-select" id="type" name="type" required>
+                    <option value="false">Searching for a room</option>
+                    <option value="true">Providing a room</option>
+                </select>
+            </div>
+
+            <!-- Attributes Section -->
+            <div class="form-section">
+                <h5 class="text-success">Your Attributes</h5>
+
+                <div class="mb-3">
+                    <label for="pets" class="form-label">Pets</label>
+                    <select class="form-select" id="pets" name="attributes[pets]" required>
+                        <option value="true">Yes</option>
+                        <option value="false">No</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="smoking" class="form-label">Smoking</label>
+                    <select class="form-select" id="smoking" name="attributes[smoking]" required>
+                        <option value="true">Yes</option>
+                        <option value="false">No</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="sex" class="form-label">Sex</label>
+                    <select class="form-select" id="sex" name="attributes[sex]" required>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="age" class="form-label">Age</label>
+                    <input type="number" class="form-control" id="age" name="attributes[age]" placeholder="Your age" min="0"
+                        max="99" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="relationship_status" class="form-label">Relationship Status</label>
+                    <select class="form-select" id="relationship_status" name="attributes[relationship_status]" required>
+                        <option value="single">Single</option>
+                        <option value="taken">Taken</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="degree" class="form-label">Degree</label>
+                    <select class="form-select" id="degree" name="attributes[degree]" required>
+                        <option value="bachelors">Bachelors</option>
+                        <option value="masters">Masters</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="language" class="form-label">Preferred Language</label>
+                    <input type="text" class="form-control" id="language" name="attributes[language]"
+                        placeholder="Your language" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="weekend_attendance" class="form-label">Weekend Attendance</label>
+                    <select class="form-select" id="weekend_attendance" name="attributes[weekend_attendance]" required>
+                        <option value="never">Never</option>
+                        <option value="often">Often</option>
+                        <option value="always">Always</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="semester" class="form-label">Current Semester</label>
+                    <select class="form-select" id="semester" name="attributes[semester]" required>
+                        <option value="1st">1st</option>
+                        <option value="2nd">2nd</option>
+                        <option value="3rd">3rd</option>
+                        <option value="4th">4th</option>
+                        <option value="5th">5th</option>
+                        <option value="6th">6th</option>
+                        <option value="7th">7th</option>
+                        <option value="8th">8th</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="fitness" class="form-label">How often do you work out/play sports?</label>
+                    <select class="form-select" id="fitness" name="attributes[fitness]" required>
+                        <option value="never">Never</option>
+                        <option value="once_a_month">Once a month</option>
+                        <option value="once_a_week">Once a week</option>
+                        <option value="multiple_times_a_week">Multiple times a week</option>
+                        <option value="daily">Daily</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="d-grid">
+                <button type="submit" class="btn btn-green">Sign Up</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-qP82zP5G5yIBZfSj+S0Y/lcs2HGPFxdh/j7uSbBTGpGT7ZRuSX2rf3I5QD5cJ8Up" crossorigin="anonymous"></script>
+</body>
+
+</html>
