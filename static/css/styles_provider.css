@@ -1,0 +1,59 @@
+body {
+    background-color: #ffffff; /* White background */
+    font-family: Arial, sans-serif;
+}
+
+/* Header styling */
+.header {
+    background-color: #1e7e34; /* Dark green background */
+    color: #ffffff; /* White text */
+    padding: 3rem 1rem; /* Spacing */
+    text-align: center; /* Center-align content */
+}
+
+.header h1 {
+    font-size: 3rem; /* Larger title font */
+    font-weight: bold; /* Bold title */
+}
+
+.header p {
+    color: #d4edda; /* Light green text */
+    font-size: 1.2rem; /* Slightly smaller font */
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.user-card {
+    border: 1px solid #008542; /* St. Gallen green */
+    border-radius: 8px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.user-card img {
+    width: 100%;
+    height: auto;
+}
+
+.user-details {
+    padding: 15px;
+    background-color: #f8f9fa;
+}
+
+.user-details h5 {
+    color: #008542; /* St. Gallen green */
+}
+
+.btn-contact {
+    background-color: #008542; /* St. Gallen green */
+    color: white;
+    margin-top: 10px;
+}
+
+.btn-contact:hover {
+    background-color: #006838;
+}
