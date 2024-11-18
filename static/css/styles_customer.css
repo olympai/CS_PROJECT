@@ -1,7 +1,5 @@
 /* Custom CSS for Dashboard */
 
-/* Dashboard-specific styles */
-
 /* Header Styling */
 .header {
     background-color: #1e7e34; /* Dark green background */
@@ -48,10 +46,6 @@
     padding: 20px;
 }
 
-.property-info {
-    margin-bottom: 15px;
-}
-
 .match-score {
     background-color: #28a745;
     color: #fff;
@@ -60,12 +54,34 @@
     border-radius: 5px;
 }
 
-.filter-btn {
+.apply-btn {
     background-color: #28a745;
     color: white;
     border: none;
+    margin-top: 10px;
+    padding: 10px 20px;
+    border-radius: 25px;
 }
 
-.filter-btn:hover {
+.apply-btn:hover {
+    background-color: #218838;
+}
+
+.modal-content {
+    border-radius: 10px;
+}
+
+.modal-header {
+    background-color: #28a745;
+    color: white;
+    border-bottom: none;
+}
+
+.modal-footer .btn-confirm {
+    background-color: #28a745;
+    color: white;
+}
+
+.modal-footer .btn-confirm:hover {
     background-color: #218838;
 }

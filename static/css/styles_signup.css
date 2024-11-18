@@ -1,0 +1,39 @@
+body {
+    background-color: #ffffff; /* Dominantly white */
+}
+
+.container {
+    max-width: 700px;
+    margin-top: 50px;
+    padding: 30px;
+    border: 2px solid #008542; /* St. Gallen green */
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+h2, h5 {
+    color: #008542; /* St. Gallen green */
+}
+
+label {
+    color: #008542; /* Labels in green */
+}
+
+.btn-green {
+    background-color: #008542; /* St. Gallen green */
+    color: white;
+}
+
+.btn-green:hover {
+    background-color: #006838;
+}
+
+.form-section {
+    margin-top: 20px;
+    border-top: 2px solid #008542;
+    padding-top: 15px;
+}
+
+.d-none {
+    display: none;
+}
