@@ -1,43 +1,105 @@
-# importing the necessary tables
+from sklearn.cluster import KMeans
+import pandas as pd
+import numpy as np
+import matplotlib as plt
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import silhouette_score
+from scipy.spatial.distance import euclidean
+
 from db_config import db
-from db_config.db_tables import Preferences, Offer, Matches
+from db_config.db_tables import Matches, Offer
 
 # the machine learning function
-def clustering_function(user_id):
-    # initialize empty
-    matchings = []
-    matching_score = 0
+# def clustering_function(user_id):
+# initialize empty
+matchings = []
+matchings_entries = []
+matching_score = 0
 
-    # get the preferences of a user or specification of the offer, look the structure in db_config.db_table up
-    preferences = Preferences.query.filter_by(id=user_id).first()
-    offers = Offer.query.all()
 
-    # YOUR CODE 
-    # ...
+# Calculate matching score based on euclidean distance
+def calculate_matching_score(user1, user2):
+    df = pd.read_sql('SELECT * FROM preferences', db.engine)
 
-    # return the matchings, e.g. with the following structure
-    matchings = [
-        # best matchings in descending order
-        # best matching
-        {
-            'offer_id': '...', # the corresponding offer_id
-            'matching_score': matching_score # the score on which basis we should rank the matchings
-        },
-        # second best matching
-        {
-            'offer_id': '...', # the corresponding offer_id
-            'matching_score': matching_score # the score on which basis we should rank the matchings
-        }
-        # n-th best matching
-        # ...
-    ]
+    user1_preferences = df[df['user_id'] == user1].drop(['user_id', 'cluster'], axis=1).apply(pd.to_numeric, errors='coerce').fillna(0).values.flatten()
+    user2_preferences = df[df['user_id'] == user2].drop(['user_id', 'cluster'], axis=1).apply(pd.to_numeric, errors='coerce').fillna(0).values.flatten()
+    return euclidean(user1_preferences, user2_preferences)
 
-    # append new matches to the database, following this structure (also look in
-    for match in matchings:
+
+def clustering_function(session_id):
+    df = pd.read_sql('SELECT * FROM preferences', db.engine)
+    #replace NaNs with True to avoid errors
+    df = df.fillna(True)
+
+    #  Define features and target
+    X = pd.get_dummies(df[["pets", "sex", "age", "smoking"]])
+    X = np.where(X == True, 1, X)
+    X = np.where(X == False, 0, X)
+
+    #Standardize features 
+    scaler = StandardScaler() 
+    X = scaler.fit_transform(X) 
+
+    #define our clusters
+    #define cluster list, start from 2 so that silhouette score can be calculated
+    cluster_amount = list(range(10, 100))
+    for i in cluster_amount:
+        kmeans = KMeans(n_clusters=i)
+        #fit the model 
+        df['cluster'] = kmeans.fit_predict(X)
+
+        #Evaluate performance
+        silhouette_avg = silhouette_score(X, df['cluster'])
+        if 'best_score' not in locals() or silhouette_avg > best_score:
+            best_score = silhouette_avg
+            best_cluster = i
+
+    # print(f'Best Silhouette Score is: {best_score} for {best_cluster} clusters')
+
+    kmeans = KMeans(n_clusters=best_cluster)
+    #fit the model 
+    df['cluster'] = kmeans.fit_predict(X)
+
+    # Group customers by cluster
+    clusters = df.groupby('cluster')['user_id'].apply(list).to_dict()
+
+    #add the matchings to the list
+    for cluster, customers in clusters.items():
+        for i in range(len(customers)):
+            for j in range(i + 1, len(customers)):  # Avoid self-matching and duplicates
+                matchings.append((customers[i], customers[j]))
+
+    # Convert matches to a DataFrame for clarity
+    matches_df = pd.DataFrame(matchings, columns=['user_id', 'offer_id'])
+    print(matches_df)
+
+    # Add matching score to matches_df
+    matches_df['matching_score'] = matches_df.apply(lambda row: calculate_matching_score(row['user_id'], row['offer_id']), axis=1)
+
+    # Sort matches by matching score in ascending order (lower distance means better match)
+    matches_df = matches_df.sort_values(by='matching_score')
+    print(matches_df)
+    # Normalize matching scores to a range of 0-100
+    min_score = matches_df['matching_score'].min()
+    max_score = matches_df['matching_score'].max()
+
+    matches_df['normalized_matching_score'] = 100 * (1 - (matches_df['matching_score'] - min_score) / (max_score - min_score))
+
+    # Print the DataFrame with normalized scores
+    # print(matches_df)
+
+    this_df = matches_df[matches_df['user_id'] == session_id]
+    for col in this_df.columns:
+        offer = Offer.query.filter_by(user_id = this_df['offer_id']).first()
+        matchings_entries.append({
+            'offer_id': offer.id,
+            'matching_score': this_df['normalized_matching_score']
+        })
+        # append to database
         new_match = Matches(
-            user_id = user_id,
-            offer_id = match.offer_id,
-            score = match.matching_score
+            user_id = session_id,
+            offer_id = offer.id,
+            score = this_df['normalized_matching_score']
         )
         db.session.add(new_match)
     db.session.commit()

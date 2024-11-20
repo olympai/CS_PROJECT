@@ -3,7 +3,7 @@ from flask import render_template
 from datetime import datetime
 
 from db_config import db
-from db_config.db_tables import Matches, Offer, User
+from db_config.db_tables import Matches, Offer, FlatMate
 from machine_learning.clustering import clustering_function
 
 # the customer dashboard load function
@@ -28,7 +28,7 @@ def dashboard_2(user_id):
             # append information about the match
             match.append({
                 'user_id': m.user_id,
-                'email': User.query.filter_by(id=m.user_id).first().email
+                'email': FlatMate.query.filter_by(id=m.user_id).first().email
             })
 
         # gather information about the offers
@@ -82,7 +82,7 @@ def matches_1(user_id, request):
     if offer_id:
         # get the matched contact
         matched_user_id = Offer.query.filter_by(id=offer_id).first().user_id
-        matched_contact = User.query.filter_by(id=matched_user_id).first().email
+        matched_contact = FlatMate.query.filter_by(id=matched_user_id).first().email
 
         # update the successful match
         match = Matches.query.filter_by(user_id=user_id, offer_id=offer_id).first()
