@@ -1,0 +1,98 @@
+/* General page styling */
+body {
+    background-color: #ffffff; /* White background */
+    color: #333333; /* Dark grey text */
+    font-family: Arial, sans-serif; /* Clean and consistent font */
+    line-height: 1.6; /* Improve readability */
+}
+
+/* Header Styling */
+.header {
+    background-color: #1e7e34; /* Dark green background */
+    color: #ffffff; /* White text */
+    padding: 3rem 1rem; /* Space around the header */
+    text-align: center; /* Center-align content */
+}
+
+.header h1 {
+    font-size: 3rem; /* Large font size for the title */
+    font-weight: bold; /* Bold text */
+    margin-bottom: 1rem; /* Space below the title */
+}
+
+.header p {
+    font-size: 1.2rem; /* Slightly smaller font size for the subtitle */
+    color: #d4edda; /* Light green text */
+}
+
+/* Container Styling */
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem 1rem; /* Add padding for consistent spacing */
+}
+
+/* User Card Styling */
+.user-card {
+    border: 1px solid #e9ecef; /* Light grey border to match the dashboard design */
+    border-radius: 10px; /* Rounded corners for a softer look */
+    margin-bottom: 20px; /* Space between cards */
+    overflow: hidden; /* Ensure contents don’t overflow the card */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Consistent shadow styling */
+}
+
+.user-card img {
+    width: 100%; /* Full width for images */
+    height: auto; /* Maintain aspect ratio */
+    border-bottom: 1px solid #e9ecef; /* Subtle separation between image and details */
+}
+
+/* User Details Section */
+.user-details {
+    padding: 15px;
+    background-color: #f8f9fa; /* Light grey background for contrast */
+}
+
+.user-details h5 {
+    color: #28a745; /* Consistent green for titles */
+    font-size: 1.2rem; /* Slightly larger font for prominence */
+    margin-bottom: 10px;
+}
+
+.user-details p {
+    margin-bottom: 10px; /* Space between paragraphs */
+    color: #333333; /* Standard dark text color */
+}
+
+/* Button Styling */
+.btn-contact {
+    display: inline-block;
+    background-color: #28a745; /* Consistent green button background */
+    color: #ffffff; /* White text */
+    padding: 10px 20px; /* Comfortable padding */
+    border: none; /* Remove border */
+    border-radius: 25px; /* Rounded buttons for a clean look */
+    font-weight: bold; /* Bold text for emphasis */
+    text-decoration: none; /* Remove underline */
+    margin-top: 10px; /* Space above button */
+    text-align: center;
+}
+
+.btn-contact:hover {
+    background-color: #218838; /* Slightly darker green on hover */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .user-card {
+        margin-bottom: 15px; /* Adjust spacing for smaller screens */
+    }
+
+    .header h1 {
+        font-size: 2.5rem; /* Slightly smaller font for small screens */
+    }
+
+    .header p {
+        font-size: 1rem; /* Adjust subtitle font size */
+    }
+}

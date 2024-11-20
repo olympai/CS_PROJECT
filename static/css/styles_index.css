@@ -1,0 +1,121 @@
+/* add some styles */
+/* if possible work with different css files for different styling classes, e.g. buttons.css, cards.css ... */
+
+ /* General page styling */
+ body {
+    background-color: #ffffff; /* White background */
+    color: #333333; /* Dark grey text */
+    font-family: Arial, sans-serif; /* Clean font */
+    line-height: 1.6; /* Improve readability */
+}
+
+/* Floating buttons styling (top-right corner) */
+.floating-buttons {
+    position: fixed; /* Fixed position for scrolling */
+    top: 20px; /* Distance from the top */
+    right: 20px; /* Distance from the right */
+    z-index: 1000; /* Ensure buttons are above all other elements */
+}
+
+.floating-buttons a {
+    display: inline-block;
+    margin-left: 10px; /* Spacing between buttons */
+    padding: 10px 20px; /* Padding inside buttons */
+    font-size: 1rem; /* Text size */
+    font-weight: bold; /* Bold text */
+    border-radius: 25px; /* Rounded corners */
+    text-decoration: none; /* Remove underline */
+    border: 2px solid #28a745; /* Green border */
+}
+
+.floating-buttons .btn-login {
+    background-color: #28a745; /* Green background */
+    color: #ffffff; /* White text */
+}
+
+.floating-buttons .btn-signup {
+    background-color: #ffffff; /* White background */
+    color: #28a745; /* Green text */
+}
+
+.floating-buttons .btn-signup:hover {
+    background-color: #28a745; /* Green background on hover */
+    color: #ffffff; /* White text on hover */
+}
+
+.floating-buttons .btn-login:hover {
+    opacity: 0.9; /* Slight hover effect */
+}
+
+/* Header styling */
+.header {
+    background-color: #1e7e34; /* Dark green background */
+    color: #ffffff; /* White text */
+    padding: 3rem 1rem; /* Spacing */
+    text-align: center; /* Center-align content */
+}
+
+.header h1 {
+    font-size: 3rem; /* Larger title font */
+    font-weight: bold; /* Bold title */
+}
+
+.header p {
+    color: #d4edda; /* Light green text */
+    font-size: 1.2rem; /* Slightly smaller font */
+}
+
+/* Section Backgrounds */
+.section-grey {
+    background-color: #f8f9fa; /* Light grey background */
+    padding: 3rem 1rem; /* Space for grey section */
+}
+
+.section-white {
+    background-color: #ffffff; /* White background */
+    padding: 3rem 1rem; /* Space for white section */
+}
+
+/* Features section styling */
+.feature-box {
+    background-color: #ffffff; /* White background for boxes */
+    border: 1px solid #e9ecef; /* Subtle border */
+    border-radius: 8px; /* Rounded corners */
+    padding: 2rem; /* Spacing */
+    margin-bottom: 2rem; /* Space below box */
+    text-align: center; /* Center-align content */
+}
+
+/* Footer buttons styling */
+.footer-buttons a {
+    margin: 5px; /* Margin between buttons */
+    padding: 10px 20px; /* Padding inside buttons */
+    font-size: 1rem; /* Font size */
+    font-weight: bold; /* Bold text */
+    border-radius: 25px; /* Rounded corners */
+    text-decoration: none; /* Remove underline */
+    border: 2px solid #28a745; /* Green border */
+}
+
+.footer-buttons .btn-login {
+    background-color: #28a745; /* Green background */
+    color: #ffffff; /* White text */
+}
+
+.footer-buttons .btn-signup {
+    background-color: #ffffff; /* White background */
+    color: #28a745; /* Green text */
+}
+
+.footer-buttons .btn-signup:hover {
+    background-color: #28a745; /* Green background on hover */
+    color: #ffffff; /* White text on hover */
+}
+
+.carousel-item {
+    height: 100vh;
+    min-height: 300px;
+    background: no-repeat center center scroll;
+    background-size: cover;
+    text-align: center;
+}
