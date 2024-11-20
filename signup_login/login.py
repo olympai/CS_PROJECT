@@ -3,7 +3,7 @@
 from flask import session, redirect, render_template
 from werkzeug.security import check_password_hash
 
-from db_config.db_tables import User
+from db_config.db_tables import FlatMate
 
 # the login function, takes the request as aparameter
 def login_1(request):
@@ -15,7 +15,7 @@ def login_1(request):
         password = request.form.get('password')
 
         # get the user instance
-        user = User.query.filter_by(email=email).first()
+        user = FlatMate.query.filter_by(email=email).first()
 
         # check whether there is such a user
         if user:
