@@ -3,7 +3,7 @@ from werkzeug.security import generate_password_hash
 import re
 
 from db_config import db
-from db_config.db_tables import User, Preferences
+from db_config.db_tables import FlatMate, Preferences
 
 # Signup Handler class
 class Signup:
@@ -44,12 +44,12 @@ class Signup:
         # create a password hash for security reasons
         hashed_password = generate_password_hash(self.password)
         # there is already a user with this email registered in the system
-        if User.query.filter_by(email=self.email).first():
+        if FlatMate.query.filter_by(email=self.email).first():
             self.error = 'There is already a user with this email registered.'
             return render_template('signup.html', error=self.error)
         else:
             # create a new user and move on to the dashboard
-            new_user = User(email=self.email, password=hashed_password, type=self.type)
+            new_user = FlatMate(email=self.email, password=hashed_password, type=self.type)
             # add the new entry to the database
             db.session.add(new_user)
             db.session.commit()
