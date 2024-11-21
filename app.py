@@ -6,7 +6,7 @@ from flask import render_template, request, session, redirect
 from factory import app
 from signup_login.login import login_1
 from signup_login.signup import signup_1
-from dashboard.dashboard import dashboard_1, dashboard_2, filtering_1, matches_1
+from dashboard.dashboard import dashboard_1, dashboard_2, filtering_1, matches_1, accept_1, reject_1
 
 
 # ROUTES
@@ -24,20 +24,27 @@ def index():
 # Signup
 # FROM FRONTEND: POST (email, password, password_confirmation, preferences, type) type: bool -> provider (True) or customer (False)
 # TO FRONTEND: signup.html, error
-@app.route('/signup', methods=['POST'])
+@app.route('/signup', methods=['GET', 'POST'])
 def signup():
     return signup_1(request)
 
 # Login
 # FROM FRONTEND: POST (email, password)
 # TO FRONTEND: login.html, is_invalid
-@app.route('/login', methods=['POST'])
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     return login_1(request)
 
+# Logout
+# TO FRONTEND: redirect to index.html
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect('/index')
+
 # Dashboard for customers
 # TO FRONTEND: customer_dashboard.html, matchings
-@app.route('/customer_dashboard', methods=['POST'])
+@app.route('/customer_dashboard', methods=['GET', 'POST'])
 def customer_dashboard():
     # check the validity of the session
     if not session.get('user_id'):
@@ -48,7 +55,7 @@ def customer_dashboard():
 
 # Dashboard for providers
 # TO FRONTEND: provider_dashboard.html, offers
-@app.route('/provider_dashboard', methods=['POST'])
+@app.route('/provider_dashboard', methods=['GET', 'POST'])
 def provider_dashboard():
     # check the validity of the session
     if not session.get('user_id'):
@@ -60,7 +67,7 @@ def provider_dashboard():
 # Filtering
 # FROM FRONTEND: POST (criteria)
 # TO FRONTEND: customer_dashboard.html, matchings
-@app.route('/filtering', methods=['POST'])
+@app.route('/filtering', methods=['GET', 'POST'])
 def filtering():
     # check the validity of the session
     if not session.get('user_id'):
@@ -72,7 +79,7 @@ def filtering():
 # Matches
 # FROM FRONTEND: POST (offer_id)
 # TO FRONTEND: customer_dashboard.html, matchings, matched_contact
-@app.route('/matches', methods=['POST'])
+@app.route('/matches', methods=['GET', 'POST'])
 def matches():
     # check the validity of the session
     if not session.get('user_id'):
@@ -80,3 +87,28 @@ def matches():
     # get the user_id from the current flask session
     user_id = session.get('user_id')
     return matches_1(user_id, request)
+
+# Accept from provider
+@app.route('/provider_accept', methods=['GET', 'POST'])
+def provider_accept():
+    # check the validity of the session
+    if not session.get('user_id'):
+        return redirect('/login')
+    # get the user_id from the current flask session
+    user_id = session.get('user_id')
+    return accept_1(user_id, request)
+
+# Reject from provider
+@app.route('/provider_reject', methods=['GET', 'POST'])
+def provider_reject():
+    # check the validity of the session
+    if not session.get('user_id'):
+        return redirect('/login')
+    # get the user_id from the current flask session
+    user_id = session.get('user_id')
+    return reject_1(user_id, request)
+
+
+# run the app
+if __name__ == '__main__':
+    app.run(debug=True)

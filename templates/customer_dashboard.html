@@ -12,9 +12,14 @@
 
     <!-- Link to Custom Styles -->
     <link rel="stylesheet" href="../static/css/styles_customer.css">
+    <link rel="stylesheet" href="../static/css/styles_index.css">
 </head>
 
 <body>
+    <div class="floating-buttons">
+        <a href="/logout" class="btn-login">Logout</a>
+    </div>
+
     <!-- Header Section -->
     <header class="header">
         <div class="container">
@@ -23,7 +28,7 @@
         </div>
     </header>
 
-    <!-- Filter Section -->
+    <!-- Filter Section
     <div class="container filter-section">
         <h3 class="text-center">Filter Your Results</h3>
         <form action="/filtering" method="post">
@@ -46,35 +51,31 @@
                 <button type="submit" class="btn filter-btn">Apply Filters</button>
             </div>
         </form>
-    </div>
+    </div> -->
 
     <!-- Properties Section -->
     <div class="container">
         {% for property in properties %}
         <div class="property-card">
-            <img src="{{ property.image_url }}" alt="Property Image">
             <div class="property-details">
-                <div class="d-flex justify-content-between align-items-center">
-                    <h4>{{ property.name }}</h4>
-                    <span class="match-score">{{ property.match_score }}%</span>
-                </div>
-                <p class="property-info"><strong>Provider:</strong> {{ property.provider.name }} ({{ property.provider.gender }}/{{ property.provider.age }})</p>
-                <p class="property-info"><strong>Size:</strong> Flat: {{ property.flat_size }}m², Room: {{ property.room_size }}m²</p>
-                <p class="property-info"><strong>Price:</strong> €{{ property.price }}</p>
-                <p class="property-info"><strong>Distance to University:</strong> {{ property.distance_to_uni }}km</p>
-                <p class="property-info"><strong>Bathrooms:</strong> {{ property.bathrooms }}</p>
-                <p class="property-info"><strong>Roommates:</strong> {{ property.roommates | length }}</p>
-                <ul>
-                    {% for roommate in property.roommates %}
-                    <li>{{ roommate.name }} ({{ roommate.gender }}/{{ roommate.age }})</li>
-                    {% endfor %}
-                </ul>
-                <!-- Apply Button -->
-                <button class="apply-btn btn btn-success" data-bs-toggle="modal" data-bs-target="#applyModal" 
-                    data-provider="{{ property.provider.name }}" 
-                    data-id="{{ property.id }}">
-                    Apply
-                </button>
+            <div class="d-flex justify-content-between align-items-center">
+                <h4>{{ property['name'] }}</h4>
+                <span><b>{{ property['match_status'] }}</b></span>
+                <span class="match-score">{{ property['match_score'] }}%</span>
+            </div>
+            <p class="property-info"><strong>Description:</strong> {{ property['description'] }}</p>
+            <p class="property-info"><strong>Address:</strong> {{ property['address'] }}</p>
+            <p class="property-info"><strong>Provider:</strong> {{ property['provider'] }} | {{ property['contact'] }}</p>
+            <p class="property-info"><strong>Size:</strong> Flat: {{ property['flat_size'] }}m², Room: {{ property['room_size'] }}m²</p>
+            <p class="property-info"><strong>Price:</strong> CHF {{ property['price'] }}</p>
+            <p class="property-info"><strong>Distance to University:</strong> {{ property['distance'] }}km</p>
+            <p class="property-info"><strong>Bathrooms:</strong> {{ property['bathrooms'] }}</p>
+            <!-- Apply Button -->
+            <button class="apply-btn btn btn-success" data-bs-toggle="modal" data-bs-target="#applyModal" 
+                data-provider="{{ property['provider'] }}" 
+                data-id="{{ property['id'] }}">
+                Apply
+            </button>
             </div>
         </div>
         {% endfor %}

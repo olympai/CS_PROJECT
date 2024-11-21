@@ -82,6 +82,7 @@ body {
     background-color: #218838; /* Slightly darker green on hover */
 }
 
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .user-card {

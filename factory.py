@@ -11,7 +11,7 @@ from db_config import db
 def create_app():
     app = Flask(__name__)  
     # connect to the database
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://uf83oikjpd68ug:p34f86f490652371e7274e08eb8f22f323ae84077f405a392738ea23cdbdf6c58@c3opaibi71ph4s.cluster-czrs8kj4isg7.us-east-1.rds.amazonaws.com:5432/d2rua5utalol1h'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://u6n3ohfjmrl1e3:pd140fdef8081ecf86007e1e131b8175252f355578b48e8c3c336810b352630a6@c9tiftt16dc3eo.cluster-czz5s0kz4scl.eu-west-1.rds.amazonaws.com:5432/d2hqvl8rdvqoj7'
     app.config['SECRET_KEY'] = 'ourcoolcsproject24'
     
     db.init_app(app)

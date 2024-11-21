@@ -1,7 +1,6 @@
 from sklearn.cluster import KMeans
 import pandas as pd
 import numpy as np
-import matplotlib as plt
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import silhouette_score
 from scipy.spatial.distance import euclidean
@@ -89,17 +88,17 @@ def clustering_function(session_id):
     # print(matches_df)
 
     this_df = matches_df[matches_df['user_id'] == session_id]
-    for col in this_df.columns:
-        offer = Offer.query.filter_by(user_id = this_df['offer_id']).first()
+    for index, row in this_df.iterrows():
+        offer = Offer.query.filter_by(user_id=row['offer_id']).first()
         matchings_entries.append({
             'offer_id': offer.id,
-            'matching_score': this_df['normalized_matching_score']
+            'match_score': row['normalized_matching_score']
         })
         # append to database
         new_match = Matches(
-            user_id = session_id,
-            offer_id = offer.id,
-            score = this_df['normalized_matching_score']
+            user_id=session_id,
+            offer_id=offer.id,
+            score=row['normalized_matching_score']
         )
         db.session.add(new_match)
     db.session.commit()

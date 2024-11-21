@@ -9,7 +9,7 @@
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-    <link rel="stylesheet" href="../static/css/styles.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link rel="stylesheet" href="../static/css/styles_signup.css">
 </head>
 
@@ -22,39 +22,6 @@
         </div>
     </header>
 
-    <div class="container">
-        
-
-        <!-- Display error messages ONLY if there is an actual error -->
-=======
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="../static/css/styles.css">
-    <!-- Custom styles -->
-    <style>
-        body {
-            background-color: #ffffff; /* Dominantly white */
-        }
-
-        .container {
-            max-width: 600px;
-            margin-top: 50px;
-            padding: 20px;
-            border: 1px solid #e6e6e6;
-            border-radius: 10px;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .btn-green {
-            background-color: #008542; /* St. Gallen green */
-            color: white;
-        }
-
-        .btn-green:hover {
-            background-color: #006838;
-        }
-    </style>
-</head>
-
 <body>
     <div class="container">
         <h2 class="text-center text-success">Sign Up</h2>
@@ -66,7 +33,7 @@
         {% endif %}
 
         <!-- Sign-Up Form -->
-        <form method="POST" action="/signup" enctype="multipart/form-data">
+        <form method="post" action="/signup">
             <!-- Basic Information -->
             <div class="mb-3">
                 <label for="first_name" class="form-label">First Name</label>
@@ -120,9 +87,8 @@
                 <div class="mb-3">
                     <label for="sex" class="form-label">Sex</label>
                     <select class="form-select" id="sex" name="attributes[sex]" required>
-                        <option value="male">Male</option>
-                        <option value="female">Female</option>
-                        <option value="other">Other</option>
+                        <option value="true">Male</option>
+                        <option value="false">Female</option>
                     </select>
                 </div>
 
@@ -132,69 +98,110 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="social" class="form-label">How social are you when it comes to roommates?</label>
-                    <select class="form-select" id="social" name="attributes[social]" required>
-                        <option value="hang_out_often">Let’s hang out and do things together often!</option>
-                        <option value="mix">A mix of hanging out and doing our own thing sounds great.</option>
-                        <option value="keep_to_myself">I like keeping to myself most of the time.</option>
+                    <label for="relationship_status" class="form-label">What's your relationship status?</label>
+                    <select class="form-select" id="relationship_status" name="attributes[relationship_status]" required>
+                        <option value="false">Single</option>
+                        <option value="true">Committed</option>
                     </select>
-                </div>
-
-                <div class="mb-3">
-                    <label for="language" class="form-label">Preferred Language</label>
-                    <input type="text" class="form-control" id="language" name="attributes[language]" placeholder="Your language" required>
                 </div>
 
                 <div class="mb-3">
                     <label for="degree" class="form-label">Degree</label>
                     <select class="form-select" id="degree" name="attributes[degree]" required>
-                        <option value="bachelor">Bachelor</option>
-                        <option value="master">Master</option>
+                        <option value="false">Bachelor</option>
+                        <option value="true">Master</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="language" class="form-label">Preferred Language</label>
+                    <input type="text" class="form-control" id="language" name="preferences[language]"
+                        placeholder="Enter your preferred language">
+                </div>
+
+                <div class="mb-3">
+                    <label for="community" class="form-label">How social are you when it comes to roommates?</label>
+                    <select class="form-select" id="community" name="attributes[community]" required>
+                        <option value="3">Let’s hang out and do things together often!</option>
+                        <option value="2">A mix of hanging out and doing our own thing sounds great.</option>
+                        <option value="1">I like keeping to myself most of the time.</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="attendance" class="form-label">Are you usually staying over the weekend?</label>
+                    <select class="form-select" id="attendance" name="attributes[attendance]" required>
+                        <option value="true">Yes</option>
+                        <option value="false">No</option>
                     </select>
                 </div>
                 
                 <div class="mb-3">
                     <label for="semester" class="form-label">Current Semester</label>
                     <select class="form-select" id="semester" name="attributes[semester]" required>
-                        <option value="1st">1st</option>
-                        <option value="2nd">2nd</option>
-                        <option value="3rd">3rd</option>
-                        <option value="4th">4th</option>
-                        <option value="5th">5th</option>
-                        <option value="6th">6th</option>
-                        <option value="7th">7th</option>
-                        <option value="8th">8th</option>
+                        <option value="1">1st</option>
+                        <option value="2">2nd</option>
+                        <option value="3">3rd</option>
+                        <option value="4">4th</option>
+                        <option value="5">5th</option>
+                        <option value="6">6th</option>
+                        <option value="7">7th</option>
+                        <option value="8">8th</option>
                     </select>
                 </div>
             </div>
 
+            <div class="mb-3">
+                <label for="fitness" class="form-label">Are you fit?</label>
+                <select class="form-select" id="fitness" name="attributes[fitness]" required>
+                    <option value="true">Yes, I work out regulary.</option>
+                    <option value="false">No, I don't do so.</option>
+                </select>
+            </div>
+
             <!-- About the Apartment Section (only for providers) -->
             <div id="aboutApartmentSection" class="form-section d-none">
-                <h5 class="text-success">About the Apartment</h5>
+                <h5 class="text-success">About the offered Apartment</h5>
+
+                <div class="mb-3">
+                    <label for="title" class="form-label">Title</label>
+                    <input type="text" class="form-control" id="title" name="apartment[title]"
+                        placeholder="Enter a title">
+                </div>
+
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea class="form-control" id="description" name="apartment[description]" rows="3" placeholder="Describe the apartment" ></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label for="address" class="form-label">Address</label>
+                    <textarea class="form-control" id="address" name="apartment[adress]" rows="3" placeholder="Enter address of the apartment" ></textarea>
+                </div>
 
                 <div class="mb-3">
                     <label for="price" class="form-label">Price (in CHF)</label>
-                    <input type="number" class="form-control" id="price" name="apartment[price]" placeholder="Enter price" required>
+                    <input type="number" class="form-control" id="price" name="apartment[price]" placeholder="Enter price" >
                 </div>
 
                 <div class="mb-3">
                     <label for="distance" class="form-label">Distance to University (in kilometers)</label>
-                    <input type="number" step="0.1" class="form-control" id="distance" name="apartment[distance]" placeholder="Enter distance" required>
+                    <input type="number" step="0.1" class="form-control" id="distance" name="apartment[distance]" placeholder="Enter distance" >
                 </div>
 
                 <div class="mb-3">
                     <label for="apartment_size" class="form-label">Size of the Apartment (in m²)</label>
-                    <input type="number" class="form-control" id="apartment_size" name="apartment[apartment_size]" placeholder="Enter apartment size" required>
+                    <input type="number" class="form-control" id="apartment_size" name="apartment[apartment_size]" placeholder="Enter apartment size" >
                 </div>
 
                 <div class="mb-3">
                     <label for="room_size" class="form-label">Size of the Available Room (in m²)</label>
-                    <input type="number" class="form-control" id="room_size" name="apartment[room_size]" placeholder="Enter room size" required>
+                    <input type="number" class="form-control" id="room_size" name="apartment[room_size]" placeholder="Enter room size" >
                 </div>
 
                 <div class="mb-3">
                     <label for="roommates" class="form-label">Amount of Roommates</label>
-                    <select class="form-select" id="roommates" name="apartment[roommates]" required>
+                    <select class="form-select" id="roommates" name="apartment[roommates]" >
                         <option value="1">1</option>
                         <option value="2">2</option>
                         <option value="3">3</option>
@@ -205,7 +212,7 @@
 
                 <div class="mb-3">
                     <label for="bathrooms" class="form-label">Amount of Bathrooms</label>
-                    <select class="form-select" id="bathrooms" name="apartment[bathrooms]" required>
+                    <select class="form-select" id="bathrooms" name="apartment[bathrooms]" >
                         <option value="1">1</option>
                         <option value="2">2</option>
                         <option value="3">3</option>
@@ -213,56 +220,6 @@
                         <option value="5">5</option>
                     </select>
                 </div>
-            </div>
-
-            <!-- Image Upload Section -->
-            <div id="imageUploadSection" class="form-section">
-                <h5 class="text-success">Upload Images</h5>
-
-                <!-- Section for people searching for a room -->
-                <div id="searchingImages" class="mb-3">
-                    <label for="searchingPhoto" class="form-label">Upload a picture of yourself</label>
-                    <input type="file" class="form-control" id="searchingPhoto" name="searchingPhoto" accept="image/*" required>
-                </div>
-
-                <!-- Section for people providing a room -->
-                <div id="providingImages" class="d-none">
-                    <label for="providerPhoto" class="form-label">Upload a picture of yourself</label>
-                    <input type="file" class="form-control mb-3" id="providerPhoto" name="providerPhoto" accept="image/*" required>
-
-                    <label for="apartmentPhotos" class="form-label">Upload at least 3 pictures of the apartment</label>
-                    <input type="file" class="form-control" id="apartmentPhotos" name="apartmentPhotos[]" accept="image/*" multiple required>
-                </div>
-            <!-- Preferences -->
-            <h5 class="text-success">Preferences</h5>
-            <div class="form-check mb-2">
-                <input class="form-check-input" type="checkbox" id="pets" name="preferences[pets]">
-                <label class="form-check-label" for="pets">I am okay with pets</label>
-            </div>
-            <div class="form-check mb-2">
-                <input class="form-check-input" type="checkbox" id="smoking" name="preferences[smoking]">
-                <label class="form-check-label" for="smoking">I am okay with smoking</label>
-            </div>
-            <div class="mb-3">
-                <label for="age" class="form-label">Age</label>
-                <input type="number" class="form-control" id="age" name="preferences[age]" placeholder="Enter your age">
-            </div>
-            <div class="form-check mb-2">
-                <input class="form-check-input" type="checkbox" id="relationship_status" name="preferences[relationship_status]">
-                <label class="form-check-label" for="relationship_status">I prefer shared flats with single individuals</label>
-            </div>
-            <div class="form-check mb-2">
-                <input class="form-check-input" type="checkbox" id="degree" name="preferences[degree]">
-                <label class="form-check-label" for="degree">I am a Master's student</label>
-            </div>
-            <div class="mb-3">
-                <label for="language" class="form-label">Preferred Language</label>
-                <input type="text" class="form-control" id="language" name="preferences[language]"
-                    placeholder="Enter your preferred language">
-            </div>
-            <div class="mb-3">
-                <label for="community" class="form-label">Community Preference (1-5)</label>
-                <input type="range" class="form-range" id="community" name="preferences[community]" min="1" max="5">
             </div>
 
             <!-- Submit Button -->
@@ -277,45 +234,25 @@
 
     <!-- Custom JS for toggling sections -->
     <script>
-        function toggleConditionalSections() {
+       function toggleConditionalSections() {
             const type = document.getElementById('type').value;
             const apartmentSection = document.getElementById('aboutApartmentSection');
-            const searchingImages = document.getElementById('searchingImages');
-            const providingImages = document.getElementById('providingImages');
+
+            // Elemente für Validierung
+            const apartmentSizeInput = document.getElementById('apartment_size');
 
             if (type === "true") { // Providing a room
                 apartmentSection.classList.remove('d-none');
-                searchingImages.classList.add('d-none');
-                providingImages.classList.remove('d-none');
+
+                // Set required for provider-specific fields
+                apartmentSizeInput.setAttribute('required', true);
             } else { // Searching for a room
                 apartmentSection.classList.add('d-none');
-                searchingImages.classList.remove('d-none');
-                providingImages.classList.add('d-none');
+
+                // Remove required for provider-specific fields
+                apartmentSizeInput.removeAttribute('required');
             }
         }
-
-        document.querySelector('form').addEventListener('submit', function (event) {
-            const type = document.getElementById('type').value;
-
-            if (type === "false") {
-                const searchingPhoto = document.getElementById('searchingPhoto');
-                if (!searchingPhoto.files || searchingPhoto.files.length < 1) {
-                    alert('Please upload at least one picture of yourself.');
-                    event.preventDefault();
-                }
-            } else if (type === "true") {
-                const providerPhoto = document.getElementById('providerPhoto');
-                const apartmentPhotos = document.getElementById('apartmentPhotos');
-                if (!providerPhoto.files || providerPhoto.files.length < 1) {
-                    alert('Please upload at least one picture of yourself.');
-                    event.preventDefault();
-                }
-                if (!apartmentPhotos.files || apartmentPhotos.files.length < 3) {
-                    alert('Please upload at least three pictures of the apartment.');
-                    event.preventDefault();
-                }
-            }
-        });
     </script>
 </body>
 
