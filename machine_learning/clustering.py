@@ -77,7 +77,6 @@ def clustering_function(session_id):
 
     # Sort matches by matching score in ascending order (lower distance means better match)
     matches_df = matches_df.sort_values(by='matching_score')
-    print(matches_df)
     # Normalize matching scores to a range of 0-100
     min_score = matches_df['matching_score'].min()
     max_score = matches_df['matching_score'].max()
