@@ -8,7 +8,7 @@ class FlatMate(db.Model, UserMixin):
     __tablename__ = 'flatmate'
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(40), nullable=True)
-    email = db.Column(db.String(40), nullable=True, unique=True) # as connect possibility
+    email = db.Column(db.String(40), nullable=True, unique=True) # as connection possibility
     password = db.Column(db.String(250), nullable=True)
     type = db.Column(db.Boolean, nullable=True) # True for providers, False for customers
 
@@ -60,7 +60,3 @@ class Offer(db.Model):
     bathrooms = db.Column(db.Integer, nullable=True)
 
     matches = db.relationship('Matches', backref='offer', lazy=True)
-
-# further tables
-# ...
-

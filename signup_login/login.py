@@ -4,6 +4,7 @@ from flask import session, redirect, render_template
 from werkzeug.security import check_password_hash
 
 from db_config.db_tables import FlatMate
+from dashboard.dashboard import dashboard_1
 
 # the login function, takes the request as aparameter
 def login_1(request):
@@ -27,7 +28,7 @@ def login_1(request):
                 if user.type:
                     return redirect('/provider_dashboard')
                 else:
-                    return redirect('/customer_dashboard')
+                    return dashboard_1(user.id, True)
 
         # if the password is not valid or there is no such user account, return a warning, return to the login page
         is_invalid = True

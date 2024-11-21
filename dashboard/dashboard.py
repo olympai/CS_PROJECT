@@ -7,30 +7,31 @@ from db_config.db_tables import Matches, Offer, FlatMate, Matches, Preferences
 from machine_learning.clustering import clustering_function
 
 # the customer dashboard load function
-def dashboard_1(user_id):
+def dashboard_1(user_id, selector=False):
     properties = []
-    try:
-        matchings = clustering_function(user_id)
-    except Exception as e:
-        print(f"An error occurred while clustering: {str(e)}")
-        matchings = []
+    if selector:
+        try:
+            clustering_function(user_id)
+        except Exception as e:
+            print(f"An error occurred while clustering: {str(e)}")
+
+    matchings = Matches.query.filter_by(user_id=user_id).all()
     for match in matchings:
         # empty values
         matching_status = ''
         contact = ''
 
         # check if the match is already successful
-        match_status = Matches.query.filter_by(user_id=user_id, offer_id=match['offer_id']).first().successful_match
+        match_status = match.successful_match
         if match_status == 1:
             matching_status = 'Pending'
         elif match_status == 2:
             matching_status = 'Successful'
-            contact = FlatMate.query.filter_by(id=Offer.query.filter_by(id=match['offer_id']).first().user_id).first().email
+            contact = FlatMate.query.filter_by(id=Offer.query.filter_by(id=match.offer_id).first().user_id).first().email
         elif match_status == 3:
             matching_status = 'Rejected'
 
-
-        property_info = Offer.query.filter_by(id=match['offer_id']).first()
+        property_info = Offer.query.filter_by(id=match.offer_id).first()
         properties.append({
             'id': property_info.id,
             'name': property_info.title,
@@ -42,7 +43,7 @@ def dashboard_1(user_id):
             'price': property_info.price,
             'distance': property_info.distance,
             'bathrooms': property_info.bathrooms,
-            'match_score': round(match['match_score'], 2),
+            'match_score': round(match.score, 2),
             'matching_status': matching_status,
             'contact': contact
         })
@@ -134,7 +135,7 @@ def matches_1(user_id, request):
         match.successful_match = 1
         db.session.commit()
 
-    return redirect('/customer_dashboard')
+    return dashboard_1(user_id)
 
 # provider accepts the match
 def accept_1(user_id, request):

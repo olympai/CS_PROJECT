@@ -1,10 +1,10 @@
-from flask import render_template, redirect, request
+from flask import render_template, redirect, session
 from werkzeug.security import generate_password_hash
 import re
-import json
 
 from db_config import db
 from db_config.db_tables import FlatMate, Preferences, Offer
+from dashboard.dashboard import dashboard_1
 
 # Signup Handler class
 class Signup:
@@ -105,6 +105,8 @@ class Signup:
                 # add the new entry to the database
                 db.session.add(new_user)
                 db.session.commit()
+                # set session variable
+                session['user_id'] = new_user.id
                 # add the preferences
                 self.add_preferences()
                 # if provider add the apartment details
@@ -118,7 +120,7 @@ class Signup:
                     return redirect('/provider_dashboard')
                 # if customer
                 else:
-                    return redirect('/customer_dashboard')
+                    return dashboard_1(new_user.id, True)
         except Exception as e:
             db.session.rollback()
             self.error = f"An error occurred while creating a new user: {str(e)}"

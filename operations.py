@@ -23,20 +23,22 @@ def init_db():
 
     # Generate dataset with 100 random entries
     entries = []
-    for i in range(2, 102):  # Assuming user_id starts from 1
+    for i in range(1, 102):  # Assuming user_id starts from 1
         # Create sample users
+        email = faker.email()
         user = FlatMate(
-            id=i,
             first_name=faker.name(),
-            email=faker.email(),
+            email=email,
             password=faker.password(),
             type=True
         )
         db.session.add(user)
+        db.session.commit()
 
+        user_id = FlatMate.query.filter_by(email=email).first().id
 
         entry = Preferences(
-            user_id=i,
+            user_id=user_id,
             pets=random.choice([True, False]),
             smoking=random.choice([True, False]),
             sex=random.choice([True, False]),  # True for Male, False for Female, None for not specified
@@ -50,10 +52,11 @@ def init_db():
             fitness=random.choice([True, False])  # True for sportive, False for not sportive
         )
         entries.append(entry)
+        db.session.add(entry)
+        db.session.commit()
 
         offer = Offer(
-            id=i,
-            user_id=i,
+            user_id=user_id,
             title=faker.sentence(nb_words=2),
             description=faker.text(max_nb_chars=200),
             address=faker.address(),
@@ -67,7 +70,6 @@ def init_db():
         db.session.add(offer)
 
     # Add entries to the database
-    db.session.add_all(entries)
     db.session.commit()
 
     return "100 preferences entries have been added to the database."
