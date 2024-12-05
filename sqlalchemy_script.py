@@ -1053,3 +1053,35 @@ def create_db():
     # Commit changes
     db.session.commit()
     return "Data added to database"
+
+def alter_db():
+    app.app_context().push()
+    Offer.query.delete()
+    db.session.commit()
+
+    # realistic offers
+    csv_file = "realistic_offer_entries.csv"  # Replace with the actual path to your CSV file
+    df = pd.read_csv(csv_file)
+
+    # Insert data into the SQLAlchemy table
+    for _, row in df.iterrows():
+        new_offer = Offer(
+            id=row['id'],
+            user_id=row['user_id'],
+            title=row['title'],
+            description=row['description'],
+            address=row['address'],
+            price=row['price'],
+            distance=row['distance'],
+            apartment_size=row['apartment_size'],
+            room_size=row['room_size'],
+            roommates=row['roommates'],
+            bathrooms=row['bathrooms'],
+        )
+        db.session.add(new_offer)
+
+    print("Data successfully exported to SQLAlchemy.")
+
+    # Commit changes
+    db.session.commit()
+    return "Data added to database"
