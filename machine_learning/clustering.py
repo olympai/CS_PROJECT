@@ -34,7 +34,7 @@ def clustering_function(session_id):
 
 
     #  Define features and hot-encode categorical variables
-    X = pd.get_dummies(df[["pets", "sex", "age", "smoking"]])
+    X = pd.get_dummies(df[["age", "semester", "attendance", "fitness"]])
     #make sure true and false are replaced with 0 and 1
     X = np.where(X == True, 1, X)
     X = np.where(X == False, 0, X)
@@ -48,7 +48,7 @@ def clustering_function(session_id):
     X = scaler.fit_transform(X)
 
     #define best amount of clusters based on clusterting.ipynb results
-    best_cluster = 11
+    best_cluster = 26
 
     #fit the model for best amount of clusters
     kmeans = KMeans(n_clusters=best_cluster)
