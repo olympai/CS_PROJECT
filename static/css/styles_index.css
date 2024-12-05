@@ -119,3 +119,23 @@
     background-size: cover;
     text-align: center;
 }
+.quartier-card {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    text-align: left;
+    transition: transform 0.5s;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.quartier-card:hover {
+    transform: translateY(-5px);
+}
+.quartier-card-front {
+    font-style: bold;
+    font-size: larger;
+    color: #1e7e34;
+}

@@ -32,9 +32,62 @@
         </div>
     </header>
 
-    <!-- Filter Section
+    <!-- Statistics Section -->
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card text-white bg-primary mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title
+                        ">Total Matches</h5>
+                        <p class="card-text">You have a total of <b>45</b> matches.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-white bg-success mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title
+                        ">Accepted Matches</h5>
+                        <p class="card-text">You have accepted <b>3</b> matches.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-white bg-danger mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title
+                        ">Rejected Matches</h5>
+                        <p class="card-text">You have rejected <b>10</b> matches.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="container mt-3 mb-4">
+        <h3 class="text-center mb-4">Your Property Insights</h3>
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <canvas id="squareMetersChart"></canvas>
+                    </div>
+                    <div class="col-md-4">
+                        <canvas id="distanceChart"></canvas>
+                    </div>
+                    <div class="col-md-4">
+                        <canvas id="priceChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filter Section -->
     <div class="container filter-section">
-        <h3 class="text-center">Filter Your Results</h3>
+        <h3 class="text-center mb-4">Filter Your Results</h3>
         <form action="/filtering" method="post">
             <div class="row">
                 <div class="col-md-4">
@@ -55,34 +108,46 @@
                 <button type="submit" class="btn filter-btn">Apply Filters</button>
             </div>
         </form>
-    </div> -->
+    </div>
 
     <!-- Properties Section -->
     <div class="container">
-        {% for property in properties %}
-        <div class="property-card">
-            <div class="property-details">
-            <div class="d-flex justify-content-between align-items-center">
-                <h4>{{ property['name'] }}</h4>
-                <span><b>{{ property['matching_status'] }}</b></span>
-                <span class="match-score">{{ property['match_score'] }}%</span>
+        <div class="row">
+            {% for property in properties %}
+            <div class="col-md-6">
+                <div class="property-card">
+                    <!-- Property Image -->
+                    <div class="property-image">
+                        <img src="../static/img/bild_1.png" alt="Property Image" class="img-fluid">
+                    </div>
+                    <div class="property-details">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h4>{{ property['name'] }}</h4>
+                            <span><b>{{ property['matching_status'] }}</b></span>
+                            <span class="match-score">{{ property['match_score'] }}%</span>
+                        </div>
+                        <p class="property-info"><strong>Description:</strong> {{ property['description'] }}</p>
+                        <p class="property-info"><strong>Address:</strong> {{ property['address'] }}</p>
+                        <p class="property-info"><strong>Provider:</strong> {{ property['provider'] }} | {{ property['contact'] }}</p>
+                        <p class="property-info"><strong>Size:</strong> Flat: {{ property['flat_size'] }}m², Room: {{ property['room_size'] }}m²</p>
+                        <p class="property-info"><strong>Price:</strong> CHF {{ property['price'] }}</p>
+                        <p class="property-info"><strong>Distance to University:</strong> {{ property['distance'] }}km</p>
+                        <p class="property-info"><strong>Bathrooms:</strong> {{ property['bathrooms'] }}</p>
+                        <!-- Apply Button -->
+                        <button class="apply-btn btn btn-success" data-bs-toggle="modal" data-bs-target="#applyModal" 
+                            data-provider="{{ property['provider'] }}" 
+                            data-id="{{ property['id'] }}">
+                            Apply
+                        </button>
+                    </div>
+                </div>
             </div>
-            <p class="property-info"><strong>Description:</strong> {{ property['description'] }}</p>
-            <p class="property-info"><strong>Address:</strong> {{ property['address'] }}</p>
-            <p class="property-info"><strong>Provider:</strong> {{ property['provider'] }} | {{ property['contact'] }}</p>
-            <p class="property-info"><strong>Size:</strong> Flat: {{ property['flat_size'] }}m², Room: {{ property['room_size'] }}m²</p>
-            <p class="property-info"><strong>Price:</strong> CHF {{ property['price'] }}</p>
-            <p class="property-info"><strong>Distance to University:</strong> {{ property['distance'] }}km</p>
-            <p class="property-info"><strong>Bathrooms:</strong> {{ property['bathrooms'] }}</p>
-            <!-- Apply Button -->
-            <button class="apply-btn btn btn-success" data-bs-toggle="modal" data-bs-target="#applyModal" 
-                data-provider="{{ property['provider'] }}" 
-                data-id="{{ property['id'] }}">
-                Apply
-            </button>
-            </div>
+            {% if forloop.counter|divisibleby:2 and not forloop.last %}
         </div>
-        {% endfor %}
+        <div class="row">
+            {% endif %}
+            {% endfor %}
+        </div>
     </div>
 
     <!-- Apply Confirmation Modal -->
@@ -143,7 +208,77 @@
                 });
             }
         });
-    </script>
+        document.addEventListener("DOMContentLoaded", function () {
+    // Function to create a chart
+    function createChart(ctxId, chartType, labels, data, label, backgroundColor, borderColor) {
+        const ctx = document.getElementById(ctxId).getContext('2d');
+        new Chart(ctx, {
+            type: chartType,
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: label,
+                    data: data,
+                    backgroundColor: backgroundColor,
+                    borderColor: borderColor,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+
+    // Sample chart data
+    const chartConfigs = [
+        {
+            ctxId: 'squareMetersChart',
+            chartType: 'bar',
+            labels: ['Apartment A', 'Apartment B', 'Apartment C', 'Apartment D'],
+            data: [45, 60, 75, 90],
+            label: 'Square Meters',
+            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+            borderColor: 'rgba(54, 162, 235, 1)'
+        },
+        {
+            ctxId: 'distanceChart',
+            chartType: 'bar',
+            labels: ['Apartment A', 'Apartment B', 'Apartment C', 'Apartment D'],
+            data: [2.5, 3.0, 1.2, 4.5],
+            label: 'Distance to University (km)',
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            borderColor: 'rgba(75, 192, 192, 1)'
+        },
+        {
+            ctxId: 'priceChart',
+            chartType: 'bar',
+            labels: ['Apartment A', 'Apartment B', 'Apartment C', 'Apartment D'],
+            data: [1200, 1500, 1800, 2000],
+            label: 'Price (CHF)',
+            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+            borderColor: 'rgba(255, 99, 132, 1)'
+        }
+    ];
+
+    // Create charts
+    chartConfigs.forEach(config => {
+        createChart(
+            config.ctxId,
+            config.chartType,
+            config.labels,
+            config.data,
+            config.label,
+            config.backgroundColor,
+            config.borderColor
+        );
+    });
+});
+</script>
 </body>
 
 </html>

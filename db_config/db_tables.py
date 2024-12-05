@@ -8,7 +8,7 @@ class FlatMate(db.Model, UserMixin):
     __tablename__ = 'flatmate'
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(40), nullable=True)
-    email = db.Column(db.String(40), nullable=True, unique=True) # as connection possibility
+    email = db.Column(db.String(40), nullable=True) # as connection possibility
     password = db.Column(db.String(250), nullable=True)
     type = db.Column(db.Boolean, nullable=True) # True for providers, False for customers
 
@@ -20,18 +20,17 @@ class FlatMate(db.Model, UserMixin):
 class Preferences(db.Model):
     __tablename__ = 'preferences'
     user_id = db.Column(db.Integer, db.ForeignKey('flatmate.id'), primary_key=True)
-    pets = db.Column(db.Integer, nullable=True) # Scale from 1 to 5
-    smoking = db.Column(db.Integer, nullable=True) # Scale from 1 to 5
-    sex = db.Column(db.Boolean, nullable=True) # True for male, False for female
-    some for filterting
+    pets = db.Column(db.Integer, nullable=True)
+    smoking = db.Column(db.Integer, nullable=True)
+    sex = db.Column(db.Boolean, nullable=True)
     age = db.Column(db.Integer, nullable=True)
-    relationship_status = db.Column(db.Boolean, nullable=True) # True for committed, False for single
-    degree = db.Column(db.Boolean, nullable=True) # True for Master, False for Bachelor
+    relationship_status = db.Column(db.Boolean, nullable=True)
+    degree = db.Column(db.Boolean, nullable=True)
     language = db.Column(db.String(20), nullable=True)
     semester = db.Column(db.Integer, nullable=True)
-    community = db.Column(db.Integer, nullable=True) # Scale from 1 to 5
-    attendance = db.Column(db.Integer, nullable=True) # Scale from 1 to 5
-    fitness = db.Column(db.Integer, nullable=True) # Scale from 1 to 5 
+    community = db.Column(db.Integer, nullable=True)
+    attendance = db.Column(db.Integer, nullable=True)
+    fitness = db.Column(db.Integer, nullable=True)
 
 # tables for the matches
 class Matches(db.Model):

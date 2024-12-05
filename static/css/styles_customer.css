@@ -25,6 +25,26 @@
     border-radius: 10px;
     margin-bottom: 30px;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e9ecef;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.filter-section:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 8px 12px rgba(0, 0, 0, 0.2);
+}
+
+.filter-btn {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 25px;
+}
+
+.filter-btn:hover {
+    background-color: #218838;
+    color: white;
 }
 
 .property-card {
