@@ -117,16 +117,20 @@ def clustering_function(session_id):
     # delete old matches
     Matches.query.filter_by(user_id=session_id).delete()
     db.session.commit()
-    
+
     for index, row in this_df.iterrows():
-        offer = Offer.query.filter_by(user_id=int(row['offer_id'])).first()
-        # append to database
-        new_match = Matches(
-            user_id=session_id,
-            offer_id=int(offer.id),
-            score=float(row['normalized_matching_score'])
-        )
-        db.session.add(new_match)
+        print(int(row['offer_id']))
+        try:
+            offer = Offer.query.filter_by(user_id=int(row['offer_id'])).first()
+            # append to database
+            new_match = Matches(
+                user_id=session_id,
+                offer_id=offer.id,
+                score=float(row['normalized_matching_score'])
+            )
+            db.session.add(new_match)
+        except:
+            continue
     db.session.commit()
 
     return matchings_entries
