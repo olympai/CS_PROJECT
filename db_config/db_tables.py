@@ -20,17 +20,18 @@ class FlatMate(db.Model, UserMixin):
 class Preferences(db.Model):
     __tablename__ = 'preferences'
     user_id = db.Column(db.Integer, db.ForeignKey('flatmate.id'), primary_key=True)
-    pets = db.Column(db.Boolean, nullable=True) # True if animals are no problem
-    smoking = db.Column(db.Boolean, nullable=True)
+    pets = db.Column(db.Integer, nullable=True) # Scale from 1 to 5
+    smoking = db.Column(db.Integer, nullable=True) # Scale from 1 to 5
     sex = db.Column(db.Boolean, nullable=True) # True for male, False for female
+    some for filterting
     age = db.Column(db.Integer, nullable=True)
     relationship_status = db.Column(db.Boolean, nullable=True) # True for committed, False for single
     degree = db.Column(db.Boolean, nullable=True) # True for Master, False for Bachelor
     language = db.Column(db.String(20), nullable=True)
-    community = db.Column(db.Integer, nullable=True) # Scale from 1 to 3
-    attendance = db.Column(db.Boolean, nullable=True) # True for weekend there, False for weekend away
     semester = db.Column(db.Integer, nullable=True)
-    fitness = db.Column(db.Boolean, nullable=True) # True for sportive, No for not sportive
+    community = db.Column(db.Integer, nullable=True) # Scale from 1 to 5
+    attendance = db.Column(db.Integer, nullable=True) # Scale from 1 to 5
+    fitness = db.Column(db.Integer, nullable=True) # Scale from 1 to 5 
 
 # tables for the matches
 class Matches(db.Model):
