@@ -5,6 +5,7 @@ import re
 from db_config import db
 from db_config.db_tables import FlatMate, Preferences, Offer
 from dashboard.dashboard import dashboard_1
+from utils.img_upload import upload_file
 
 # Signup Handler class
 class Signup:
@@ -43,17 +44,26 @@ class Signup:
     # add preferences
     def add_preferences(self):
         try:
-            # transform a dictionary in kwargs value pairs
-            for key, item in self.preferences.items():
-                if key in ['age', 'community', 'semester']:
-                    self.preferences[key] = int(item)
-                elif key == 'language':
-                    self.preferences[key] = str(item)
-                else:
-                    self.preferences[key] = True if item == 'true' else False
-            
             # add the user_id to the preferences
             self.preferences['user_id'] = FlatMate.query.filter_by(email=self.email).first().id
+
+            # transform a dictionary in kwargs value pairs
+            for key, item in self.preferences.items():
+                if key in ['age', 'community', 'semester', 'attendance', 'pets', 'smoking', 'fitness']:
+                    # Convert these to integers as they represent numeric ratings or values
+                    self.preferences[key] = int(item)
+                elif key == 'language':
+                    # Convert language to string
+                    self.preferences[key] = str(item)
+                elif key in ['sex', 'relationship_status', 'degree']:
+                    # Convert these to boolean values
+                    self.preferences[key] = True if item == 'true' else False
+                elif key == 'image':
+                    # Handle image uploads
+                    error, code = upload_file(item, self.preferences['user_id'], 'user')
+                    if code != 200:
+                        self.error = error
+                        break
 
             # create a new preference instance
             new_preference = Preferences(**self.preferences)
@@ -68,17 +78,20 @@ class Signup:
     # add apartment details
     def add_apartment(self):
         try:
+            # add the user_id to the apartment
+            self.apartment['user_id'] = FlatMate.query.filter_by(email=self.email).first().id
+
             # transform a dictionary in kwargs value pairs
             for key, item in self.apartment.items():
                 if key in ['title', 'description', 'address']:
                     self.apartment[key] = str(item)
                 elif key in ['price', 'distance']:
                     self.apartment[key] = float(item)
+                # Handle image upload later because of offer_id not assigned yet
+                elif key == 'image':
+                    pass
                 else:
                     self.apartment[key] = int(item)
-            
-            # add the user_id to the apartment
-            self.apartment['user_id'] = FlatMate.query.filter_by(email=self.email).first().id
 
             # create a new preference instance
             new_apartment = Offer(**self.apartment)
@@ -86,6 +99,13 @@ class Signup:
             # add them to the database
             db.session.add(new_apartment)
             db.session.commit()
+
+            # Handle image upload
+            error, code = upload_file(self.apartment['image'], new_apartment.id, 'offer')
+            if code != 200:
+                db.session.rollback()
+                self.error = error
+
         except Exception as e:
             db.session.rollback()
             self.error = f"An error occurred while adding apartment details: {str(e)}"
@@ -146,6 +166,7 @@ def signup_1(request):
                 attributes['attendance'] = request.form.get("attributes[attendance]")
                 attributes['semester'] = request.form.get("attributes[semester]")
                 attributes['fitness'] = request.form.get("attributes[fitness]")
+                attributes['image'] = request.files['attributes[image]']
                 preferences = attributes
 
                 type = request.form.get("type")
@@ -160,6 +181,7 @@ def signup_1(request):
                     apartment['room_size'] = request.form.get("apartment[room_size]")
                     apartment['roommates'] = request.form.get("apartment[roommates]")
                     apartment['bathrooms'] = request.form.get("apartment[bathrooms]")
+                    apartment['image'] = request.files['apartment[image]']
                 else:
                     apartment = {}
 

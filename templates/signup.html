@@ -69,18 +69,24 @@
                 <h5 class="text-success">Your Attributes</h5>
 
                 <div class="mb-3">
-                    <label for="pets" class="form-label">Pets</label>
+                    <label for="pets" class="form-label">How comfortable are you with pets?</label>
                     <select class="form-select" id="pets" name="attributes[pets]" required>
-                        <option value="true">Yes</option>
-                        <option value="false">No</option>
+                        <option value="1">1 - Not at all comfortable</option>
+                        <option value="2">2 - Slightly comfortable</option>
+                        <option value="3">3 - Moderately comfortable</option>
+                        <option value="4">4 - Very comfortable</option>
+                        <option value="5">5 - Extremely comfortable</option>
                     </select>
                 </div>
 
                 <div class="mb-3">
-                    <label for="smoking" class="form-label">Smoking</label>
+                    <label for="smoking" class="form-label">How comfortable are you with smoking?</label>
                     <select class="form-select" id="smoking" name="attributes[smoking]" required>
-                        <option value="true">Yes</option>
-                        <option value="false">No</option>
+                        <option value="1">1 - Not at all comfortable</option>
+                        <option value="2">2 - Slightly comfortable</option>
+                        <option value="3">3 - Moderately comfortable</option>
+                        <option value="4">4 - Very comfortable</option>
+                        <option value="5">5 - Extremely comfortable</option>
                     </select>
                 </div>
 
@@ -122,17 +128,22 @@
                 <div class="mb-3">
                     <label for="community" class="form-label">How social are you when it comes to roommates?</label>
                     <select class="form-select" id="community" name="attributes[community]" required>
-                        <option value="3">Let’s hang out and do things together often!</option>
-                        <option value="2">A mix of hanging out and doing our own thing sounds great.</option>
-                        <option value="1">I like keeping to myself most of the time.</option>
+                        <option value="1">1 - I like keeping to myself most of the time.</option>
+                        <option value="2">2 - I prefer occasional social interactions.</option>
+                        <option value="3">3 - A mix of hanging out and doing our own thing sounds great.</option>
+                        <option value="4">4 - I enjoy frequent social interactions.</option>
+                        <option value="5">5 - Let’s hang out and do things together often!</option>
                     </select>
                 </div>
 
                 <div class="mb-3">
-                    <label for="attendance" class="form-label">Are you usually staying over the weekend?</label>
+                    <label for="attendance" class="form-label">How often do you stay over the weekend?</label>
                     <select class="form-select" id="attendance" name="attributes[attendance]" required>
-                        <option value="true">Yes</option>
-                        <option value="false">No</option>
+                        <option value="1">1 - Never</option>
+                        <option value="2">2 - Rarely</option>
+                        <option value="3">3 - Sometimes</option>
+                        <option value="4">4 - Often</option>
+                        <option value="5">5 - Always</option>
                     </select>
                 </div>
                 
@@ -152,11 +163,19 @@
             </div>
 
             <div class="mb-3">
-                <label for="fitness" class="form-label">Are you fit?</label>
+                <label for="fitness" class="form-label">How often do you work out?</label>
                 <select class="form-select" id="fitness" name="attributes[fitness]" required>
-                    <option value="true">Yes, I work out regulary.</option>
-                    <option value="false">No, I don't do so.</option>
+                    <option value="1">1 - Never</option>
+                    <option value="2">2 - Rarely</option>
+                    <option value="3">3 - Occasionally</option>
+                    <option value="4">4 - Often</option>
+                    <option value="5">5 - Very frequently</option>
                 </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="profile_image" class="form-label">Upload Profile Image</label>
+                <input type="file" class="form-control" id="profile_image" name="attributes[image]" accept="image/*">
             </div>
 
             <!-- About the Apartment Section (only for providers) -->
@@ -219,6 +238,11 @@
                         <option value="4">4</option>
                         <option value="5">5</option>
                     </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="apartment_image" class="form-label">Upload Apartment Image</label>
+                    <input type="file" class="form-control" id="apartment_image" name="apartment[image]" accept="image/*">
                 </div>
             </div>
 

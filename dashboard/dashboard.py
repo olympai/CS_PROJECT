@@ -7,15 +7,33 @@ from db_config.db_tables import Matches, Offer, FlatMate, Matches, Preferences
 from machine_learning.clustering import clustering_function
 
 # the customer dashboard load function
-def dashboard_1(user_id, selector=False):
+def dashboard_1(user_id, selector=False, give_matchings=[]):
     properties = []
+    matches = []
+
+    # check if the user is already clustered
     if selector:
         try:
             clustering_function(user_id)
+            matchings = Matches.query.filter_by(user_id=user_id).all()
         except Exception as e:
             print(f"An error occurred while clustering: {str(e)}")
 
-    matchings = Matches.query.filter_by(user_id=user_id).all()
+    # check whether there are any matches provided by the filtering function
+    if give_matchings:
+        matchings = [
+            Matches.query.filter_by(id=match['match_id']).first()
+            for match in give_matchings
+        ]
+
+
+    # add the number of total matches
+    matches['total'] = len(matchings)
+    # initialize the other match counters
+    matches['accepted'] = 0
+    matches['pending'] = 0
+    matches['rejected'] = 0
+
     for match in matchings:
         # empty values
         matching_status = ''
@@ -25,11 +43,14 @@ def dashboard_1(user_id, selector=False):
         match_status = match.successful_match
         if match_status == 1:
             matching_status = 'Pending'
+            matches['pending'] += 1
         elif match_status == 2:
             matching_status = 'Successful'
+            matches['accepted'] += 1
             contact = FlatMate.query.filter_by(id=Offer.query.filter_by(id=match.offer_id).first().user_id).first().email
         elif match_status == 3:
             matching_status = 'Rejected'
+            matches['rejected'] += 1
 
         property_info = Offer.query.filter_by(id=match.offer_id).first()
         properties.append({
@@ -48,7 +69,7 @@ def dashboard_1(user_id, selector=False):
             'contact': contact
         })
 
-    return render_template('/customer_dashboard.html', properties=properties)
+    return render_template('/customer_dashboard.html', properties=properties, matches=matches)
 
 # the provider dashboard load function
 def dashboard_2(user_id):
@@ -99,30 +120,34 @@ def dashboard_2(user_id):
 def filtering_1(user_id, request):
     matchings = []
 
-    matches = Matches.query.all() # filter matches by criteria from request
-    offers = Offer.query.all() # filter offer by criteria from request
+    # Get filter criteria from request
+    min_sq_meters = request.form.get("min_sq_meters", type=int)
+    max_distance_to_uni = request.form.get("max_distance_to_uni", type=int)
+    max_price = request.form.get("max_price", type=int)
 
-    # MY CODE
-    # ...
+    # Filter matches and offers by criteria from request
+    matches = Matches.query.all()
+    offers = Offer.query.filter(
+        Offer.apartment_size >= min_sq_meters,
+        Offer.distance <= max_distance_to_uni,
+        Offer.price <= max_price
+    ).all()
 
-    # return the matchings, e.g. with the following structure
+    # Filter matches based on the filtered offers
+    filtered_matches = [match for match in matches if match.offer_id in [offer.id for offer in offers]]
+
+    # Create matchings list with the filtered results
     matchings = [
-        # best matchings in descending order
-        # best matching
         {
-            'offer_id': '...', # the corresponding offer_id
-            'matching_score': matches.score # the score on which basis we should rank the matchings
-        },
-        # second best matching
-        {
-            'offer_id': '...', # the corresponding offer_id
-            'matching_score': matches.score # the score on which basis we should rank the matchings
+            'match_id': match.id,
         }
-        # n-th best matching
-        # ...
+        for match in filtered_matches
     ]
 
-    return render_template('/customer_dashboard.html', matchings=matchings)
+    # Sort matchings by matching_score in descending order
+    matchings = sorted(matchings, key=lambda x: x['matching_score'], reverse=True)
+
+    return dashboard_1(user_id=user_id, give_matchings=matchings)
 
 # the matching function
 def matches_1(user_id, request):

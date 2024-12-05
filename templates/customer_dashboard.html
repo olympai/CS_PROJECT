@@ -32,33 +32,63 @@
         </div>
     </header>
 
+    <!-- Filter Section -->
+    <div class="container filter-section">
+        <h3 class="text-center mb-4">Filter Your Results</h3>
+        <form action="/filtering" method="post">
+            <div class="row">
+                <div class="col-md-4">
+                    <label for="min_sq_meters" class="form-label">Minimum Square Meters</label>
+                    <input type="number" class="form-control" id="min_sq_meters" name="min_sq_meters" placeholder="e.g., 20" min="0">
+                </div>
+                <div class="col-md-4">
+                    <label for="max_distance_to_uni" class="form-label">Maximum Distance to University (km)</label>
+                    <input type="number" class="form-control" id="max_distance_to_uni" name="max_distance_to_uni"
+                        placeholder="e.g., 5" min="0">
+                </div>
+                <div class="col-md-4">
+                    <label for="max_price" class="form-label">Maximum Price (€)</label>
+                    <input type="number" class="form-control" id="max_price" name="max_price" placeholder="e.g., 500" min="0">
+                </div>
+            </div>
+            <div class="text-center mt-4">
+                <button type="submit" class="btn filter-btn">Apply Filters</button>
+            </div>
+        </form>
+    </div>
+
     <!-- Statistics Section -->
     <div class="container">
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="card text-white bg-primary mb-3">
                     <div class="card-body">
-                        <h5 class="card-title
-                        ">Total Matches</h5>
-                        <p class="card-text">You have a total of <b>45</b> matches.</p>
+                        <h5 class="card-title">Total Matches</h5>
+                        <p class="card-text">You have a total of <b>{{matches['total']}}</b> matches.</p>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="card text-white bg-success mb-3">
                     <div class="card-body">
-                        <h5 class="card-title
-                        ">Accepted Matches</h5>
-                        <p class="card-text">You have accepted <b>3</b> matches.</p>
+                        <h5 class="card-title">Accepted Matches</h5>
+                        <p class="card-text">You have accepted <b>{{matches['accepted']}}</b> matches.</p>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
+                <div class="card text-white bg-warning mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Pending Matches</h5>
+                        <p class="card-text">You have <b>{{matches['pending']}}</b> pending matches.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
                 <div class="card text-white bg-danger mb-3">
                     <div class="card-body">
-                        <h5 class="card-title
-                        ">Rejected Matches</h5>
-                        <p class="card-text">You have rejected <b>10</b> matches.</p>
+                        <h5 class="card-title">Rejected Matches</h5>
+                        <p class="card-text">You have rejected <b>{{matches['rejected']}}</b> matches.</p>
                     </div>
                 </div>
             </div>
@@ -85,31 +115,6 @@
         </div>
     </div>
 
-    <!-- Filter Section -->
-    <div class="container filter-section">
-        <h3 class="text-center mb-4">Filter Your Results</h3>
-        <form action="/filtering" method="post">
-            <div class="row">
-                <div class="col-md-4">
-                    <label for="min_sq_meters" class="form-label">Minimum Square Meters</label>
-                    <input type="number" class="form-control" id="min_sq_meters" name="min_sq_meters" placeholder="e.g., 20" min="0">
-                </div>
-                <div class="col-md-4">
-                    <label for="distance_to_uni" class="form-label">Distance to University (km)</label>
-                    <input type="number" class="form-control" id="distance_to_uni" name="distance_to_uni"
-                        placeholder="e.g., 5" min="0">
-                </div>
-                <div class="col-md-4">
-                    <label for="max_price" class="form-label">Maximum Price (€)</label>
-                    <input type="number" class="form-control" id="max_price" name="max_price" placeholder="e.g., 500" min="0">
-                </div>
-            </div>
-            <div class="text-center mt-4">
-                <button type="submit" class="btn filter-btn">Apply Filters</button>
-            </div>
-        </form>
-    </div>
-
     <!-- Properties Section -->
     <div class="container">
         <div class="row">
@@ -118,7 +123,7 @@
                 <div class="property-card">
                     <!-- Property Image -->
                     <div class="property-image">
-                        <img src="../static/img/bild_1.png" alt="Property Image" class="img-fluid">
+                        <img src="../static/uploads/offer_{{ property['id'] }}.png" alt="Beautiful Property Image" class="img-fluid">
                     </div>
                     <div class="property-details">
                         <div class="d-flex justify-content-between align-items-center">
@@ -228,6 +233,9 @@
                 scales: {
                     y: {
                         beginAtZero: true
+                    },
+                    x: {
+                        display: false
                     }
                 }
             }
@@ -238,27 +246,27 @@
     const chartConfigs = [
         {
             ctxId: 'squareMetersChart',
-            chartType: 'bar',
-            labels: ['Apartment A', 'Apartment B', 'Apartment C', 'Apartment D'],
-            data: [45, 60, 75, 90],
+            chartType: 'line',
+            labels: [{% for property in properties %}{{ property['name'] }}{% if not loop.last %}, {% endif %}{% endfor %}],
+            data: [{% for property in properties %}{{ property['flat_size'] }}{% if not loop.last %}, {% endif %}{% endfor %}],
             label: 'Square Meters',
             backgroundColor: 'rgba(54, 162, 235, 0.2)',
             borderColor: 'rgba(54, 162, 235, 1)'
         },
         {
             ctxId: 'distanceChart',
-            chartType: 'bar',
-            labels: ['Apartment A', 'Apartment B', 'Apartment C', 'Apartment D'],
-            data: [2.5, 3.0, 1.2, 4.5],
+            chartType: 'line',
+            labels: [{% for property in properties %}{{ property['name'] }}{% if not loop.last %}, {% endif %}{% endfor %}],
+            data: [{% for property in properties %}{{ property['distance'] }}{% if not loop.last %}, {% endif %}{% endfor %}],
             label: 'Distance to University (km)',
             backgroundColor: 'rgba(75, 192, 192, 0.2)',
             borderColor: 'rgba(75, 192, 192, 1)'
         },
         {
             ctxId: 'priceChart',
-            chartType: 'bar',
-            labels: ['Apartment A', 'Apartment B', 'Apartment C', 'Apartment D'],
-            data: [1200, 1500, 1800, 2000],
+            chartType: 'line',
+            labels: [{% for property in properties %}{{ property['name'] }}{% if not loop.last %}, {% endif %}{% endfor %}],
+            data: [{% for property in properties %}{{ property['price'] }}{% if not loop.last %}, {% endif %}{% endfor %}],
             label: 'Price (CHF)',
             backgroundColor: 'rgba(255, 99, 132, 0.2)',
             borderColor: 'rgba(255, 99, 132, 1)'

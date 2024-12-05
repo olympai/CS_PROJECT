@@ -12,7 +12,6 @@ from sklearn.model_selection import train_test_split, KFold
 
 # Initialize empty lists for matchings and matching scores
 matchings = []
-matchings_entries = []
 matching_score = 0
 
 #define matching score function
@@ -134,7 +133,8 @@ def clustering_function(session_id):
             )
             db.session.add(new_match)
         except:
+            print('Error: Could not find offer with id ' + str(row['offer_id']))
             continue
     db.session.commit()
 
-    return matchings_entries
+    pass

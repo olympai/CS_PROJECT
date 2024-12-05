@@ -24,6 +24,10 @@
     <div class="container">
         {% for user in users %}
         <div class="user-card" style="padding: 10px;">
+            <!-- User Image -->
+            <div class="property-image">
+                <img src="../static/uploads/user_{{ user['user_id'] }}.png" alt="Beautiful User Image" class="img-fluid">
+            </div>
             <div class="user-details" style="margin-bottom: 10px;">
                 <h5>{{ user['name'] }}</h5>
                 <p><strong>Email:</strong> {{ user['email'] }}</p>
