@@ -16,6 +16,8 @@
 
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+    <!-- Custom CSS -->
     <link rel="stylesheet" href="/static/css/styles_index.css">
 
     <!-- Bootstrap JS -->
@@ -52,23 +54,19 @@
     <div class="section-grey">
         <div id="imageCarousel" class="carousel slide mt-4" data-bs-ride="carousel" data-bs-interval="5000">
             <div class="carousel-inner">
-                <!-- First Image -->
                 <div class="carousel-item active">
                     <img src="/static/img/bild_1.png" class="d-block w-100" style="height: 300px; object-fit: cover;"
                         alt="Shared student apartment">
                 </div>
-                <!-- Second Image -->
                 <div class="carousel-item">
                     <img src="/static/img/bild_2.png" class="d-block w-100" style="height: 300px; object-fit: cover;"
                         alt="Apartment kitchen">
                 </div>
-                <!-- Third Image -->
                 <div class="carousel-item">
                     <img src="/static/img/bild_3.png" class="d-block w-100" style="height: 300px; object-fit: cover;"
                         alt="Bedroom in a shared flat">
                 </div>
             </div>
-            <!-- Carousel Controls -->
             <button class="carousel-control-prev" type="button" data-bs-target="#imageCarousel" data-bs-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Previous</span>
@@ -79,38 +77,290 @@
             </button>
         </div>
     </div>
-
-    <!-- Features Section -->
+    <!-- Explore Quartiers Section -->
     <div class="section-white">
-        <div class="container">
-            <h2 class="text-center">What We Offer</h2>
+        <div class="container"></div>
+            <h2 class="text-center mb-4">Explore the Quartiers of St. Gallen</h2>
+            <!-- Map -->
+            <div class="text-center mb-4"></div>
+                <img src="/static/img/bild_4.png" alt="Map of St. Gallen" class="img-fluid" style="max-width: 100%; height: auto;">
+            </div>
+
+            <!-- Quartier Cards -->
             <div class="row">
-                <div class="col-md-4">
-                    <div class="feature-box">
-                        <h3>Smart Matching</h3>
-                        <p>Get a <strong>matching score</strong> based on your preferences using advanced algorithms.</p>
+                <!-- Quartier 1 -->
+                <div class="col-md-4 mb-4">
+                    <div class="quartier-card"></div>
+                        <div class="quartier-card-front">
+                            <span>1</span>
+                            <p>Bruggen</p>
+                        </div>
+                        <div class="quartier-card-back"></div>
+                            <p>Distance to HSG: 4-5 km</p>
+                            <p>Distance to Main Station: 3.5-4 km</p>
+                            <p>Green Area: High</p>
+                            <p>Structure: Residential and commercial area</p>
+                        </div>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="feature-box">
-                        <h3>Custom Filters</h3>
-                        <p>Filter flats by <strong>size, price, and district</strong> to find the best options.</p>
+            
+                <!-- Quartier 2 -->
+                <div class="col-md-4 mb-4"></div>
+                    <div class="quartier-card">
+                        <div class="quartier-card-front">
+                            <span>2</span>
+                            <p>Dietli-Hölzli-Schoren</p>
+                        </div>
+                        <div class="quartier-card-back"></div>
+                            <p>Distance to HSG: 4-4.5 km</p>
+                            <p>Distance to Main Station: 2-3 km</p>
+                            <p>Green Area: Medium</p>
+                            <p>Structure: Residential area with single-family homes</p>
+                        </div>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="feature-box">
-                        <h3>Personalized Listings</h3>
-                        <p>Only see the most <strong>relevant flats</strong> tailored to your needs.</p>
+            
+                <!-- Quartier 3 -->
+                <div class="col-md-4 mb-4"></div>
+                    <div class="quartier-card">
+                        <div class="quartier-card-front">
+                            <span>3</span>
+                            <p>Gallusplatz</p>
+                        </div>
+                        <div class="quartier-card-back">
+                            <p>Distance to HSG: 1-1.5 km</p>
+                            <p>Distance to Main Station: 0.5-1 km</p>
+                            <p>Green Area: Low</p>
+                            <p>Structure: Densely built, commercial and residential area</p>
+                        </div>
+                    </div>
+                </div>
+            
+                <!-- Quartier 4 -->
+                <div class="col-md-4 mb-4"></div>
+                    <div class="quartier-card">
+                        <div class="quartier-card-front">
+                            <span>4</span>
+                            <p>Lachen</p>
+                        </div>
+                        <div class="quartier-card-back">
+                            <p>Distance to HSG: 3-3.5 km</p>
+                            <p>Distance to Main Station: 2.5-3 km</p>
+                            <p>Green Area: Medium</p>
+                            <p>Structure: Primarily residential</p>
+                        </div>
+                    </div>
+                </div>
+            
+                <!-- Quartier 5 -->
+                <div class="col-md-4 mb-4"></div>
+                    <div class="quartier-card">
+                        <div class="quartier-card-front">
+                            <span>5</span>
+                            <p>Nordost-Heiligkreuz</p>
+                        </div>
+                        <div class="quartier-card-back">
+                            <p>Distance to HSG: 2-2.5 km</p>
+                            <p>Distance to Main Station: 1.5-2 km</p>
+                            <p>Green Area: High</p>
+                            <p>Structure: Residential with some commercial</p>
+                        </div>
+                    </div>
+                </div>
+            
+                <!-- Quartier 6 -->
+                <div class="col-md-4 mb-4"></div>
+                    <div class="quartier-card">
+                        <div class="quartier-card-front">
+                            <span>6</span>
+                            <p>Notkersegg</p>
+                        </div>
+                        <div class="quartier-card-back">
+                            <p>Distance to HSG: 3.5-4 km</p>
+                            <p>Distance to Main Station: 3-3.5 km</p>
+                            <p>Green Area: High</p>
+                            <p>Structure: Residential, mainly single-family homes</p>
+                        </div>
+                    </div>
+                </div>
+            
+                <!-- Quartier 7 -->
+                <div class="col-md-4 mb-4"></div>
+                    <div class="quartier-card">
+                        <div class="quartier-card-front">
+                            <span>7</span>
+                            <p>Oberstrasse</p>
+                        </div>
+                        <div class="quartier-card-back">
+                            <p>Distance to HSG: 2-2.5 km</p>
+                            <p>Distance to Main Station: 1.5-2 km</p>
+                            <p>Green Area: Medium</p>
+                            <p>Structure: Mixed-use area (residential and commercial)</p>
+                        </div>
+                    </div>
+                </div>
+            
+                <!-- Quartier 8 -->
+                <div class="col-md-4 mb-4"></div>
+                    <div class="quartier-card">
+                        <div class="quartier-card-front">
+                            <span>8</span>
+                            <p>Riethüsli</p>
+                        </div>
+                        <div class="quartier-card-back">
+                            <p>Distance to HSG: 2.5-3 km</p>
+                            <p>Distance to Main Station: 2.5-3 km</p>
+                            <p>Green Area: Medium</p>
+                            <p>Structure: Residential area</p>
+                        </div>
+                    </div>
+                </div>
+            
+                <!-- Quartier 9 -->
+                <div class="col-md-4 mb-4"></div>
+                    <div class="quartier-card">
+                        <div class="quartier-card-front">
+                            <span>9</span>
+                            <p>Rosenberg</p>
+                        </div>
+                        <div class="quartier-card-back">
+                            <p>Distance to HSG: 1-1.5 km</p>
+                            <p>Distance to Main Station: 1.5-2 km</p>
+                            <p>Green Area: Medium</p>
+                            <p>Structure: Primarily residential</p>
+                        </div>
+                    </div>
+                </div>
+            
+                <!-- Quartier 10 -->
+                <div class="col-md-4 mb-4"></div>
+                    <div class="quartier-card">
+                        <div class="quartier-card-front">
+                            <span>10</span>
+                            <p>Rotmonten</p>
+                        </div>
+                        <div class="quartier-card-back">
+                            <p>Distance to HSG: 0.5-1 km</p>
+                            <p>Distance to Main Station: 2-2.5 km</p>
+                            <p>Green Area: High</p>
+                            <p>Structure: Residential area</p>
+                        </div>
+                    </div>
+                </div>
+            
+                <!-- Quartier 11 -->
+                <div class="col-md-4 mb-4"></div>
+                    <div class="quartier-card">
+                        <div class="quartier-card-front">
+                            <span>11</span>
+                            <p>St. Fiden-Neudorf</p>
+                        </div>
+                        <div class="quartier-card-back">
+                            <p>Distance to HSG: 3-3.5 km</p>
+                            <p>Distance to Main Station: 2.5-3 km</p>
+                            <p>Green Area: Medium</p>
+                            <p>Structure: Mixed-use area</p>
+                        </div>
+                    </div>
+                </div>
+            
+                <!-- Quartier 12 -->
+                <div class="col-md-4 mb-4">
+                    <div class="quartier-card">
+                        <div class="quartier-card-front"></div>
+                            <span>12</span>
+                            <p>St. Georgen</p>
+                        </div>
+                        <div class="quartier-card-back">
+                            <p>Distance to HSG: 2.5-3 km</p>
+                            <p>Distance to Main Station: 2.5-3 km</p>
+                            <p>Green Area: High</p>
+                            <p>Structure: Residential area</p>
+                        </div>
+                    </div>
+                </div>
+            
+                <!-- Quartier 13 -->
+                <div class="col-md-4 mb-4"></div>
+                    <div class="quartier-card">
+                        <div class="quartier-card-front">
+                            <span>13</span>
+                            <p>St. Mangen</p>
+                        </div>
+                        <div class="quartier-card-back">
+                            <p>Distance to HSG: 1.5-2 km</p>
+                            <p>Distance to Main Station: 1-1.5 km</p>
+                            <p>Green Area: Low</p>
+                            <p>Structure: Densely built, mixed-use area</p>
+                        </div>
+                    </div>
+                </div>
+            
+                <!-- Quartier 14 -->
+                <div class="col-md-4 mb-4"></div>
+                    <div class="quartier-card">
+                        <div class="quartier-card-front">
+                            <span>14</span>
+                            <p>St. Otmar</p>
+                        </div>
+                        <div class="quartier-card-back">
+                            <p>Distance to HSG: 1.5-2 km</p>
+                            <p>Distance to Main Station: 1-1.5 km</p>
+                            <p>Green Area: Medium</p>
+                            <p>Structure: Residential area</p>
+                        </div>
+                    </div>
+                </div>
+            
+                <!-- Quartier 15 -->
+                <div class="col-md-4 mb-4"></div>
+                    <div class="quartier-card">
+                        <div class="quartier-card-front">
+                            <span>15</span>
+                            <p>Southeast</p>
+                        </div>
+                        <div class="quartier-card-back">
+                            <p>Distance to HSG: 4-4.5 km</p>
+                            <p>Distance to Main Station: 3-3.5 km</p>
+                            <p>Green Area: High</p>
+                            <p>Structure: Residential area</p>
+                        </div>
+                    </div>
+                </div>
+            
+                <!-- Quartier 16 -->
+                <div class="col-md-4 mb-4"></div>
+                    <div class="quartier-card">
+                        <div class="quartier-card-front">
+                            <span>16</span>
+                            <p>Tschudiwies-Center</p>
+                        </div>
+                        <div class="quartier-card-back">
+                            <p>Distance to HSG: 3.5-4 km</p>
+                            <p>Distance to Main Station: 2.5-3 km</p>
+                            <p>Green Area: Medium</p>
+                            <p>Structure: Mixed-use area</p>
+                        </div>
+                    </div>
+                </div>
+            
+                <!-- Quartier 17 -->
+                <div class="col-md-4 mb-4"></div>
+                    <div class="quartier-card">
+                        <div class="quartier-card-front">
+                            <span>17</span>
+                            <p>Winkeln</p>
+                        </div>
+                        <div class="quartier-card-back">
+                            <p>Distance to HSG: 5-5.5 km</p>
+                            <p>Distance to Main Station: 4.5-5 km</p>
+                            <p>Green Area: High</p>
+                            <p>Structure: Mixed-use area with residential and commercial zones</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-
-    <!-- Footer Buttons -->
-    <div class="text-center footer-buttons mt-5">
-        <a href="/login" class="btn-login">Login</a>
-        <a href="/signup" class="btn-signup">Sign Up</a>
     </div>
 
     <!-- Footer Section -->
@@ -118,5 +368,4 @@
         <p>&copy; 2024 HSG-Roomee. All rights reserved.</p>
     </footer>
 </body>
-
 </html>
