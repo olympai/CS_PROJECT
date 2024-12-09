@@ -148,7 +148,7 @@
                     </div>
                 </div>
             </div>
-            {% if forloop.counter|divisibleby:2 and not forloop.last %}
+            {% if forloop.counter % 2 == 0 and not forloop.last %}
         </div>
         <div class="row">
             {% endif %}

@@ -10,7 +10,7 @@ from machine_learning.clustering import clustering_function
 def dashboard_1(user_id, selector=False, give_matchings=[]):
     print('dashboard_1')
     properties = []
-    matches = []
+    matches = {}
 
     # check if the user is already clustered
     if selector:

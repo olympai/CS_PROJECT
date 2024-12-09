@@ -2,13 +2,8 @@
 import pandas as pd
 import numpy as np
 from sklearn.cluster import KMeans
-from sklearn.preprocessing import StandardScaler
-from sklearn.metrics import silhouette_score
 from scipy.spatial.distance import euclidean
-from sklearn.model_selection import train_test_split, KFold
 from sklearn.preprocessing import MinMaxScaler
-
-
 
 from db_config import db
 from db_config.db_tables import Matches, Offer
@@ -38,7 +33,6 @@ def clustering_function(session_id):
     #make sure true and false are replaced with 0 and 1
     X = np.where(X == True, 1, X)
     X = np.where(X == False, 0, X)
-
 
     # Standardize features using MinMaxScaler (preprocessing to improve model performance)
     scaler = MinMaxScaler()
@@ -82,6 +76,7 @@ def clustering_function(session_id):
 
     # Add matches to the database 
     this_df = matches_df[matches_df['user_id'] == session_id]
+    print('this df:', this_df)
 
     # #another check if this works
     # print(this_df)
