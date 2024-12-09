@@ -27,12 +27,11 @@ def calculate_matching_score(df, user1, user2):
 
 #define clustering function
 def clustering_function(session_id):
-    df = pd.read_sql('SELECT * FROM preferences', db.engine)
+    df = pd.read_sql('SELECT * FROM preferences p JOIN flatmate f ON p.user_id = f.id WHERE f.type = TRUE', db.engine)
     #used for matching scores later on
     df_later = df.copy()
     #replace NaNs with True to avoid errors
     df = df.fillna(True)
-
 
     #  Define features as specified in clustering.ipynb
     X = pd.get_dummies(df[["semester", "attendance", "fitness"]])
@@ -43,7 +42,6 @@ def clustering_function(session_id):
     # Split the data into training and testing sets (5 fold cross validation)
     X_train, X_test = train_test_split(X, test_size=0.2, random_state=42)
 
-    
     # Standardize features using MinMaxScaler (preprocessing to improve model performance)
     scaler = MinMaxScaler()
     X = scaler.fit_transform(X)

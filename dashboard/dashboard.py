@@ -8,6 +8,7 @@ from machine_learning.clustering import clustering_function
 
 # the customer dashboard load function
 def dashboard_1(user_id, selector=False, give_matchings=[]):
+    print('dashboard_1')
     properties = []
     matches = []
 
@@ -17,6 +18,7 @@ def dashboard_1(user_id, selector=False, give_matchings=[]):
             clustering_function(user_id)
             matchings = Matches.query.filter_by(user_id=user_id).all()
         except Exception as e:
+            raise e
             print(f"An error occurred while clustering: {str(e)}")
 
     # check whether there are any matches provided by the filtering function
@@ -25,7 +27,6 @@ def dashboard_1(user_id, selector=False, give_matchings=[]):
             Matches.query.filter_by(id=match['match_id']).first()
             for match in give_matchings
         ]
-
 
     # add the number of total matches
     matches['total'] = len(matchings)

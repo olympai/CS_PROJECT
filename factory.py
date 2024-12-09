@@ -18,7 +18,6 @@ def create_app():
     # app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
     # for clarification and test: here the secret key is hardcoded
     app.config['SECRET_KEY'] = 'ourcoolcsproject24'
-    app.config['UPLOAD_FOLDER'] = 'static/uploads'
     
     db.init_app(app)
 

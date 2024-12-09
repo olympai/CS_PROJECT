@@ -1,11 +1,9 @@
 import os
-from flask import Flask, request, jsonify
-from werkzeug.utils import secure_filename
+from flask import jsonify
 from PIL import Image
 
-from app import app
-
 ALLOWED_EXTENSIONS = {'png'}
+UPLOAD_FOLDER = 'static/uploads'
 
 # allowed file types
 def allowed_file(filename):
@@ -14,17 +12,17 @@ def allowed_file(filename):
 # upload file
 def upload_file(file, id: int, type: str):
     if not file:
-        return jsonify({'error': 'No file part'}), 400
+        return 'No file part', 400
 
     if file.filename == '':
-        return jsonify({'error': 'No selected file'}), 400
+        return 'No selected file', 400
 
     if file and allowed_file(file.filename):
         # filename = secure_filename(file.filename)
         filename = f'{type}_{id}.png'
         
         # Generate storage path
-        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        filepath = os.path.join(UPLOAD_FOLDER, filename)
 
         # Create directory if it does not exist
         # os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
@@ -38,8 +36,8 @@ def upload_file(file, id: int, type: str):
                 img.verify()  # Checks if it is a valid image
         except Exception:
             os.remove(filepath)  # Deletes the file if it is invalid
-            return jsonify({'error': 'Uploaded file is not a valid image'}), 400
+            return 'Uploaded file is not a valid image', 400
 
-        return jsonify({'message': 'File uploaded successfully', 'filename': filename}), 200
+        return 'File uploaded successfully', 200
     else:
-        return jsonify({'error': 'Invalid file type'}), 400
+        return 'Invalid file type. Only .png allowed.', 400

@@ -59,11 +59,16 @@ class Signup:
                     # Convert these to boolean values
                     self.preferences[key] = True if item == 'true' else False
                 elif key == 'image':
+                    # Remove the image key from the dictionary
                     # Handle image uploads
                     error, code = upload_file(item, self.preferences['user_id'], 'user')
+                    print('image upload:', error, code)
                     if code != 200:
                         self.error = error
                         break
+
+            # delete image key because it is not a column in the preferences table, will be reconstructed synthetically to save storage space
+            del self.preferences['image']
 
             # create a new preference instance
             new_preference = Preferences(**self.preferences)
@@ -78,6 +83,11 @@ class Signup:
     # add apartment details
     def add_apartment(self):
         try:
+            # query last offer
+            last_offer = Offer.query.order_by(Offer.id.desc()).first()
+            # add the offer_id to the apartment
+            self.apartment['id'] = last_offer.id + 1
+
             # add the user_id to the apartment
             self.apartment['user_id'] = FlatMate.query.filter_by(email=self.email).first().id
 
@@ -92,6 +102,9 @@ class Signup:
                     pass
                 else:
                     self.apartment[key] = int(item)
+
+            # delete image key because it is not a column in the preferences table, will be reconstructed synthetically to save storage space
+            del self.apartment['image']
 
             # create a new preference instance
             new_apartment = Offer(**self.apartment)
@@ -120,8 +133,10 @@ class Signup:
                 self.error = 'There is already a user with this email registered.'
                 return render_template('signup.html', error=self.error)
             else:
+                # query last user
+                last_user = FlatMate.query.order_by(FlatMate.id.desc()).first()
                 # create a new user and move on to the dashboard
-                new_user = FlatMate(first_name=self.first_name, email=self.email, password=hashed_password, type=self.type)
+                new_user = FlatMate(id=last_user.id+1, first_name=self.first_name, email=self.email, password=hashed_password, type=self.type)
                 # add the new entry to the database
                 db.session.add(new_user)
                 db.session.commit()
@@ -134,12 +149,14 @@ class Signup:
                     self.add_apartment()
                 # error handling
                 if self.error:
+                    print('signup error:', self.error)
                     return render_template('signup.html', error=self.error)
                 # if provider
                 if self.type:
                     return redirect('/provider_dashboard')
                 # if customer
                 else:
+                    print('signup success')
                     return dashboard_1(new_user.id, True)
         except Exception as e:
             db.session.rollback()
@@ -185,7 +202,7 @@ def signup_1(request):
                 else:
                     apartment = {}
 
-            except (ValueError, TypeError) as e:
+            except (ValueError, TypeError):
                 return render_template('signup.html', error="Invalid preferences or type format.")
             
             # initialize a signup instance
