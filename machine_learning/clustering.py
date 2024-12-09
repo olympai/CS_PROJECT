@@ -39,8 +39,6 @@ def clustering_function(session_id):
     X = np.where(X == True, 1, X)
     X = np.where(X == False, 0, X)
 
-    # Split the data into training and testing sets (5 fold cross validation)
-    X_train, X_test = train_test_split(X, test_size=0.2, random_state=42)
 
     # Standardize features using MinMaxScaler (preprocessing to improve model performance)
     scaler = MinMaxScaler()
