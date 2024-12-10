@@ -157,7 +157,7 @@ class Signup:
                 # if customer
                 else:
                     print('signup success')
-                    return dashboard_1(new_user.id, True)
+                    return dashboard_1(new_user.id, 1)
         except Exception as e:
             db.session.rollback()
             self.error = f"An error occurred while creating a new user: {str(e)}"

@@ -7,22 +7,25 @@ from db_config.db_tables import Matches, Offer, FlatMate, Matches, Preferences
 from machine_learning.clustering import clustering_function
 
 # the customer dashboard load function
-def dashboard_1(user_id, selector=False, give_matchings=[]):
+def dashboard_1(user_id, selector: int, give_matchings=[]):
     print('dashboard_1')
+    print('user_id:', user_id)
     properties = []
     matches = {}
+    matchings = []
 
     # check if the user is already clustered
-    if selector:
+    if selector == 1:
         try:
             clustering_function(user_id)
             matchings = Matches.query.filter_by(user_id=user_id).all()
         except Exception as e:
-            raise e
             print(f"An error occurred while clustering: {str(e)}")
-
-    # check whether there are any matches provided by the filtering function
-    if give_matchings:
+    # get all matches (selector for matching function)
+    elif selector == 2:
+        matchings = Matches.query.filter_by(user_id=user_id).all()
+    # check whether there are any matches provided by the filtering function (selector for filtering function)
+    elif selector == 3:
         matchings = [
             Matches.query.filter_by(id=match['match_id']).first()
             for match in give_matchings
@@ -35,7 +38,10 @@ def dashboard_1(user_id, selector=False, give_matchings=[]):
     matches['pending'] = 0
     matches['rejected'] = 0
 
+    i = 0
+
     for match in matchings:
+        i += 1
         # empty values
         matching_status = ''
         contact = ''
@@ -60,14 +66,15 @@ def dashboard_1(user_id, selector=False, give_matchings=[]):
             'description': property_info.description,
             'address': property_info.address,
             'provider': FlatMate.query.filter_by(id=property_info.user_id).first().first_name,
-            'flat_size': property_info.apartment_size,
-            'room_size': property_info.room_size,
+            'flat_size': property_info.room_size,
+            'room_size': property_info.apartment_size,
             'price': property_info.price,
             'distance': property_info.distance,
             'bathrooms': property_info.bathrooms,
             'match_score': round(match.score, 2),
             'matching_status': matching_status,
-            'contact': contact
+            'contact': contact,
+            'i': i,
         })
 
     return render_template('/customer_dashboard.html', properties=properties, matches=matches)
@@ -122,14 +129,24 @@ def filtering_1(user_id, request):
     matchings = []
 
     # Get filter criteria from request
-    min_sq_meters = request.form.get("min_sq_meters", type=int)
-    max_distance_to_uni = request.form.get("max_distance_to_uni", type=int)
-    max_price = request.form.get("max_price", type=int)
+    if request.form.get("min_sq_meters"):
+        min_sq_meters = request.form.get("min_sq_meters", type=int)
+    else:
+        min_sq_meters = 0
+    if request.form.get("max_distance_to_uni"):
+        max_distance_to_uni = request.form.get("max_distance_to_uni", type=int)
+    else:
+        # just a high number to set a default comparison value
+        max_distance_to_uni = 1000000
+    if request.form.get("max_price"):
+        max_price = request.form.get("max_price", type=int) 
+    else:
+        max_price = 100000000
 
     # Filter matches and offers by criteria from request
     matches = Matches.query.all()
     offers = Offer.query.filter(
-        Offer.apartment_size >= min_sq_meters,
+        Offer.room_size >= min_sq_meters,
         Offer.distance <= max_distance_to_uni,
         Offer.price <= max_price
     ).all()
@@ -141,6 +158,7 @@ def filtering_1(user_id, request):
     matchings = [
         {
             'match_id': match.id,
+            'matching_score': match.score
         }
         for match in filtered_matches
     ]
@@ -148,7 +166,7 @@ def filtering_1(user_id, request):
     # Sort matchings by matching_score in descending order
     matchings = sorted(matchings, key=lambda x: x['matching_score'], reverse=True)
 
-    return dashboard_1(user_id=user_id, give_matchings=matchings)
+    return dashboard_1(user_id, 3, matchings)
 
 # the matching function
 def matches_1(user_id, request):
@@ -161,7 +179,7 @@ def matches_1(user_id, request):
         match.successful_match = 1
         db.session.commit()
 
-    return dashboard_1(user_id)
+    return dashboard_1(user_id, 2)
 
 # provider accepts the match
 def accept_1(user_id, request):

@@ -23,6 +23,10 @@ def calculate_matching_score(df, user1, user2):
 #define clustering function
 def clustering_function(session_id):
     df = pd.read_sql('SELECT * FROM preferences p JOIN flatmate f ON p.user_id = f.id WHERE f.type = TRUE', db.engine)
+    # add the current user
+    df_additional = pd.read_sql(f'SELECT * FROM preferences p JOIN flatmate f ON p.user_id = f.id WHERE f.id = {session_id}', db.engine)
+    df = pd.concat([df, df_additional], ignore_index=True)
+
     #used for matching scores later on
     df_later = df.copy()
     #replace NaNs with True to avoid errors
@@ -70,24 +74,15 @@ def clustering_function(session_id):
     max_score = matches_df['matching_score'].max()
     matches_df['normalized_matching_score'] = 100 * (1 - (matches_df['matching_score'] - min_score) / (max_score - min_score))
 
-    # # Print the DataFrame with normalized scores to check if it works
-    # print(matches_df)
-    # print(session_id)
-
     # Add matches to the database 
     this_df = matches_df[matches_df['user_id'] == session_id]
-    print('this df:', this_df)
-
-    # #another check if this works
-    # print(this_df)
 
     # delete old matches
     Matches.query.filter_by(user_id=session_id).delete()
     db.session.commit()
 
-
+    # add new matches
     for index, row in this_df.iterrows():
-        print(int(row['offer_id']))
         try:
             offer = Offer.query.filter_by(user_id=int(row['offer_id'])).first()
             # append to database
@@ -101,5 +96,5 @@ def clustering_function(session_id):
             print('Error: Could not find offer with id ' + str(row['offer_id']))
             continue
     db.session.commit()
-
+    
     pass

@@ -28,7 +28,7 @@ def login_1(request):
                 if user.type:
                     return redirect('/provider_dashboard')
                 else:
-                    return dashboard_1(user.id, True)
+                    return dashboard_1(user.id, 2)
 
         # if the password is not valid or there is no such user account, return a warning, return to the login page
         is_invalid = True

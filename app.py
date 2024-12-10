@@ -51,7 +51,7 @@ def customer_dashboard():
         return redirect('/login')
     # get the user_id from the current flask session
     user_id = session.get('user_id')
-    return dashboard_1(user_id)
+    return dashboard_1(user_id, 2)
 
 # Dashboard for providers
 # TO FRONTEND: provider_dashboard.html, offers
@@ -87,6 +87,17 @@ def matches():
     # get the user_id from the current flask session
     user_id = session.get('user_id')
     return matches_1(user_id, request)
+
+# Refresh
+# TO FRONTEND: customer_dashboard.html, matchings
+@app.route('/refresh', methods=['GET', 'POST'])
+def refresh():
+    # check the validity of the session
+    if not session.get('user_id'):
+        return redirect('/login')
+    # get the user_id from the current flask session
+    user_id = session.get('user_id')
+    return dashboard_1(user_id, 1)
 
 # Accept from provider
 @app.route('/provider_accept', methods=['GET', 'POST'])

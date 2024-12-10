@@ -21,6 +21,7 @@
 
 <body>
     <div class="floating-buttons">
+        <a href="/refresh" class="btn-login">Refresh</a>
         <a href="/logout" class="btn-login">Logout</a>
     </div>
 
@@ -38,7 +39,7 @@
         <form action="/filtering" method="post">
             <div class="row">
                 <div class="col-md-4">
-                    <label for="min_sq_meters" class="form-label">Minimum Square Meters</label>
+                    <label for="min_sq_meters" class="form-label">Minimum Square Meters Apartment</label>
                     <input type="number" class="form-control" id="min_sq_meters" name="min_sq_meters" placeholder="e.g., 20" min="0">
                 </div>
                 <div class="col-md-4">
@@ -134,7 +135,7 @@
                         </div>
                         <p class="property-info"><strong>Description:</strong> {{ property['description'] }}</p>
                         <p class="property-info"><strong>Address:</strong> {{ property['address'] }}</p>
-                        <p class="property-info"><strong>Provider:</strong> {{ property['provider'] }} | {{ property['contact'] }}</p>
+                        <p class="property-info"><strong>Provider:</strong> {{ property['provider'] }} {{ property['contact'] }}</p>
                         <p class="property-info"><strong>Size:</strong> Flat: {{ property['flat_size'] }}m², Room: {{ property['room_size'] }}m²</p>
                         <p class="property-info"><strong>Price:</strong> CHF {{ property['price'] }}</p>
                         <p class="property-info"><strong>Distance to University:</strong> {{ property['distance'] }}km</p>
@@ -148,7 +149,7 @@
                     </div>
                 </div>
             </div>
-            {% if forloop.counter % 2 == 0 and not forloop.last %}
+            {% if property['i'] % 2 == 0 %}
         </div>
         <div class="row">
             {% endif %}
@@ -248,8 +249,8 @@
         {
             ctxId: 'squareMetersChart',
             chartType: 'line',
-            labels: [{% for property in properties %}{{ property['name'] }}{% if not loop.last %}, {% endif %}{% endfor %}],
-            data: [{% for property in properties %}{{ property['flat_size'] }}{% if not loop.last %}, {% endif %}{% endfor %}],
+            labels: [{% for property in properties %}'{{ property["i"] }}'{% if property['i'] < matches['total']  %}, {% endif %}{% endfor %}],
+            data: [{% for property in properties %}{{ property['flat_size'] }}{% if property['i'] < matches['total']  %}, {% endif %}{% endfor %}],
             label: 'Square Meters',
             backgroundColor: 'rgba(54, 162, 235, 0.2)',
             borderColor: 'rgba(54, 162, 235, 1)'
@@ -257,8 +258,8 @@
         {
             ctxId: 'distanceChart',
             chartType: 'line',
-            labels: [{% for property in properties %}{{ property['name'] }}{% if not loop.last %}, {% endif %}{% endfor %}],
-            data: [{% for property in properties %}{{ property['distance'] }}{% if not loop.last %}, {% endif %}{% endfor %}],
+            labels: [{% for property in properties %}'{{ property["i"] }}'{% if property['i'] < matches['total']  %}, {% endif %}{% endfor %}],
+            data: [{% for property in properties %}{{ property['distance'] }}{% if property['i'] < matches['total']  %}, {% endif %}{% endfor %}],
             label: 'Distance to University (km)',
             backgroundColor: 'rgba(75, 192, 192, 0.2)',
             borderColor: 'rgba(75, 192, 192, 1)'
@@ -266,8 +267,8 @@
         {
             ctxId: 'priceChart',
             chartType: 'line',
-            labels: [{% for property in properties %}{{ property['name'] }}{% if not loop.last %}, {% endif %}{% endfor %}],
-            data: [{% for property in properties %}{{ property['price'] }}{% if not loop.last %}, {% endif %}{% endfor %}],
+            labels: [{% for property in properties %}'{{ property["i"] }}'{% if property['i'] < matches['total']  %}, {% endif %}{% endfor %}],
+            data: [{% for property in properties %}{{ property['price'] }}{% if property['i'] < matches['total']  %}, {% endif %}{% endfor %}],
             label: 'Price (CHF)',
             backgroundColor: 'rgba(255, 99, 132, 0.2)',
             borderColor: 'rgba(255, 99, 132, 1)'

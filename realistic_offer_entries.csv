@@ -1,4 +1,4 @@
-id,user_id,title,description,address,price,distance,apartment_size,room_size,roommates,bathrooms
+id,user_id,title,description,address,price,distance,room_size,apartment_size,roommates,bathrooms
 1,1,Modern Apartment in the City,"Perfect for students, close to amenities and public transport.","Rosenbergstrasse 51, 9000 St. Gallen",1224.27,2.7,3.4,21.1,4,1
 2,4,Affordable Flat for Students,Cozy apartment with modern furnishings and a central location.,"Brühlgasse 20, 9000 St. Gallen",1908.53,0.7,2.0,13.8,3,2
 3,11,Spacious Rooms in Prime Location,Spacious flat with great natural light and modern appliances.,"Neugasse 7, 9000 St. Gallen",1903.05,1.4,3.3,22.0,1,2
