@@ -53,6 +53,17 @@ def customer_dashboard():
     user_id = session.get('user_id')
     return dashboard_1(user_id, 2)
 
+# Clustering completed
+@app.route('/clustering_completed', methods=['GET', 'POST'])
+def clustering_completed():
+    # check the validity of the session
+    if not session.get('user_id'):
+        return redirect('/login')
+    # get the user_id from the current flask session
+    user_id = session.get('user_id')
+    # load the customer dashboard with the respective matchings after clustering
+    return dashboard_1(user_id, 2)
+
 # Dashboard for providers
 # TO FRONTEND: provider_dashboard.html, offers
 @app.route('/provider_dashboard', methods=['GET', 'POST'])

@@ -1,2 +1,1 @@
-- add pictures from Costa
-- change apartment and room size
+- change provider dashboard

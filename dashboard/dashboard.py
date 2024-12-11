@@ -1,65 +1,64 @@
-# the whole dashboard handling
 from flask import render_template, redirect
 from datetime import datetime
 
 from db_config import db
-from db_config.db_tables import Matches, Offer, FlatMate, Matches, Preferences
+from db_config.db_tables import Matches, Offer, FlatMate, Preferences
 from machine_learning.clustering import clustering_function
 
-# the customer dashboard load function
+# The customer dashboard load function
 def dashboard_1(user_id, selector: int, give_matchings=[]):
-    print('dashboard_1')
+    print('dashboard_1')  # Debugging information
     print('user_id:', user_id)
-    properties = []
-    matches = {}
-    matchings = []
+    
+    # Initialize data structures
+    properties = []  # Stores property details for the dashboard
+    matches = {}  # Tracks match statistics (total, accepted, pending, rejected)
+    matchings = []  # Stores matching data
 
-    # check if the user is already clustered
-    if selector == 1:
+    # Determine action based on the selector value
+    if selector == 1:  # Case 1: Perform clustering for the user
         try:
-            clustering_function(user_id)
-            matchings = Matches.query.filter_by(user_id=user_id).all()
+            job = clustering_function.apply_async(queue='alpha', args=(user_id,))
+            return render_template('progress.html', JOBID=job.id)
         except Exception as e:
-            print(f"An error occurred while clustering: {str(e)}")
-    # get all matches (selector for matching function)
-    elif selector == 2:
+            print(f"An error occurred while clustering: {str(e)}")  # Log clustering errors
+
+    elif selector == 2:  # Case 2: Fetch all existing matches for the user
         matchings = Matches.query.filter_by(user_id=user_id).all()
-    # check whether there are any matches provided by the filtering function (selector for filtering function)
-    elif selector == 3:
+
+    elif selector == 3:  # Case 3: Use pre-filtered matches provided
         matchings = [
             Matches.query.filter_by(id=match['match_id']).first()
             for match in give_matchings
         ]
 
-    # add the number of total matches
+    # Initialize match statistics
     matches['total'] = len(matchings)
-    # initialize the other match counters
     matches['accepted'] = 0
     matches['pending'] = 0
     matches['rejected'] = 0
 
-    i = 0
+    # Process each match
+    for i, match in enumerate(matchings, start=1):
+        matching_status = ''  # Default matching status
+        contact = ''  # Default contact info
 
-    for match in matchings:
-        i += 1
-        # empty values
-        matching_status = ''
-        contact = ''
-
-        # check if the match is already successful
-        match_status = match.successful_match
-        if match_status == 1:
+        # Determine match status and update counters
+        if match.successful_match == 1:  # Pending match
             matching_status = 'Pending'
             matches['pending'] += 1
-        elif match_status == 2:
+        elif match.successful_match == 2:  # Accepted match
             matching_status = 'Successful'
             matches['accepted'] += 1
             contact = FlatMate.query.filter_by(id=Offer.query.filter_by(id=match.offer_id).first().user_id).first().email
-        elif match_status == 3:
+        elif match.successful_match == 3:  # Rejected match
             matching_status = 'Rejected'
             matches['rejected'] += 1
 
+        # Retrieve property details associated with the match
         property_info = Offer.query.filter_by(id=match.offer_id).first()
+        
+        # Append formatted property information to the list
         properties.append({
             'id': property_info.id,
             'name': property_info.title,
@@ -74,40 +73,35 @@ def dashboard_1(user_id, selector: int, give_matchings=[]):
             'match_score': round(match.score, 2),
             'matching_status': matching_status,
             'contact': contact,
-            'i': i,
+            'i': i,  # Serial number
         })
 
+    # Render the customer dashboard with properties and match statistics
     return render_template('/customer_dashboard.html', properties=properties, matches=matches)
 
-# the provider dashboard load function
+# The provider dashboard load function
 def dashboard_2(user_id):
-    user = []
+    user = []  # List of matched users
 
-    # get the offers of this provider
-    all_offers = Offer.query.filter_by(user_id=user_id).first()
+    # Get all offers made by the provider
+    all_offers = Offer.query.filter_by(user_id=user_id).all()
 
-    # iterate over the offers
     for offer in all_offers:
-        # define empty
-        user = []
-
         matches = Matches.query.filter(Matches.offer_id == offer.id, Matches.successful_match.in_([1, 2])).all()
 
-        # iterate over (potential) matches
-        for m in matches:
+        for m in matches:  # Process each match
             matched_user = FlatMate.query.filter_by(id=m.user_id).first()
             if matched_user:
-                # append information about the match
                 preferences = Preferences.query.filter_by(user_id=matched_user.id).first()
-                # check the community
-                social_level = ''
-                if preferences.community == 1:
-                    social_level = 'I like keeping to myself most of the time.'
-                elif preferences.community == 2:
-                    social_level = 'A mix of hanging out and doing our own thing sounds great.'
-                elif preferences.community == 3:
-                    social_level = 'I like to socialize often.'
 
+                # Map community preferences to human-readable format
+                social_level = {
+                    1: 'I like keeping to myself most of the time.',
+                    2: 'A mix of hanging out and doing our own thing sounds great.',
+                    3: 'I like to socialize often.'
+                }.get(preferences.community, '')
+
+                # Append user details to the list
                 user.append({
                     'user_id': matched_user.id,
                     'name': matched_user.first_name,
@@ -122,91 +116,66 @@ def dashboard_2(user_id):
                     'pets': 'Yes' if preferences.pets else 'No',
                 })
 
+    # Render the provider dashboard
     return render_template('/provider_dashboard.html', user=user)
 
-# the filtering function
+# The filtering function
 def filtering_1(user_id, request):
-    matchings = []
+    # Parse filter criteria from the request
+    min_sq_meters = request.form.get("min_sq_meters", type=int, default=0)
+    max_distance_to_uni = request.form.get("max_distance_to_uni", type=int, default=1000000)
+    max_price = request.form.get("max_price", type=int, default=100000000)
 
-    # Get filter criteria from request
-    if request.form.get("min_sq_meters"):
-        min_sq_meters = request.form.get("min_sq_meters", type=int)
-    else:
-        min_sq_meters = 0
-    if request.form.get("max_distance_to_uni"):
-        max_distance_to_uni = request.form.get("max_distance_to_uni", type=int)
-    else:
-        # just a high number to set a default comparison value
-        max_distance_to_uni = 1000000
-    if request.form.get("max_price"):
-        max_price = request.form.get("max_price", type=int) 
-    else:
-        max_price = 100000000
-
-    # Filter matches and offers by criteria from request
-    matches = Matches.query.all()
+    # Filter offers based on criteria
     offers = Offer.query.filter(
         Offer.room_size >= min_sq_meters,
         Offer.distance <= max_distance_to_uni,
         Offer.price <= max_price
     ).all()
 
-    # Filter matches based on the filtered offers
-    filtered_matches = [match for match in matches if match.offer_id in [offer.id for offer in offers]]
+    # Filter matches by valid offers
+    matches = Matches.query.filter(Matches.offer_id.in_([offer.id for offer in offers])).all()
 
-    # Create matchings list with the filtered results
+    # Create matchings list with scores
     matchings = [
-        {
-            'match_id': match.id,
-            'matching_score': match.score
-        }
-        for match in filtered_matches
+        {'match_id': match.id, 'matching_score': match.score}
+        for match in matches
     ]
 
-    # Sort matchings by matching_score in descending order
-    matchings = sorted(matchings, key=lambda x: x['matching_score'], reverse=True)
+    # Sort matches by score
+    matchings.sort(key=lambda x: x['matching_score'], reverse=True)
 
+    # Pass filtered matches to the customer dashboard
     return dashboard_1(user_id, 3, matchings)
 
-# the matching function
+# The matching function
 def matches_1(user_id, request):
-    # get offer_id of matched offer
-    offer_id = request.form.get("offer_id")
+    offer_id = request.form.get("offer_id")  # Retrieve offer ID
     if offer_id:
-        # update the successful match
         match = Matches.query.filter_by(user_id=user_id, offer_id=offer_id).first()
-        # set the match status to pending
-        match.successful_match = 1
+        match.successful_match = 1  # Set match status to pending
         db.session.commit()
 
-    return dashboard_1(user_id, 2)
+    return dashboard_1(user_id, 2)  # Refresh dashboard with updated matches
 
-# provider accepts the match
+# Provider accepts the match
 def accept_1(user_id, request):
-    # get offer_id of matched offer
     matched_user_id = request.form.get("user_id")
     if matched_user_id:
-        # get the offer_id
         offer_id = Offer.query.filter_by(user_id=user_id).first().id
-        # update the successful match
-        match = Matches.query.filter_by(user_id=user_id, offer_id=offer_id).first()
-        # set the match status to successful
-        match.successful_match = 2
+        match = Matches.query.filter_by(user_id=matched_user_id, offer_id=offer_id).first()
+        match.successful_match = 2  # Set status to successful
         db.session.commit()
 
     return redirect('/provider_dashboard')
 
-# provider rejects the match
+# Provider rejects the match
 def reject_1(user_id, request):
-    # get offer_id of matched offer
     matched_user_id = request.form.get("user_id")
     if matched_user_id:
-        # get the offer_id
         offer_id = Offer.query.filter_by(user_id=user_id).first().id
-        # update the successful match
-        match = Matches.query.filter_by(user_id=user_id, offer_id=offer_id).first()
-        # set the match status to successful
-        match.successful_match = 3
+        match = Matches.query.filter_by(user_id=matched_user_id, offer_id=offer_id).first()
+        match.successful_match = 3  # Set status to rejected
         db.session.commit()
 
     return redirect('/provider_dashboard')

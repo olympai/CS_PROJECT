@@ -14,7 +14,7 @@ def create_app():
     # connect to the database
     # app.config['SQLALCHEMY_DATABASE_URI'] = correct_uri(os.environ.get('DATABASE_URL'))
     # for clarification and test: here the database URI is hardcoded
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://u6jmhcginr6i8b:p3948f89c31131fcd385685950ec70da09a8ce8808ee78358104b256e2b3f741b@clhtb6lu92mj2.cluster-czz5s0kz4scl.eu-west-1.rds.amazonaws.com:5432/dag2e7pq2p5su2'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://u21fm5hco9rlre:p1708e307e0693a7c7b14f621f7250c7a6099a87641a1560cbb8daaa091333094@c9tiftt16dc3eo.cluster-czz5s0kz4scl.eu-west-1.rds.amazonaws.com:5432/d84um7ga402mvs'
     # app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
     # for clarification and test: here the secret key is hardcoded
     app.config['SECRET_KEY'] = 'ourcoolcsproject24'

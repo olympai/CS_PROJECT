@@ -1,7 +1,9 @@
 import pandas as pd
+from werkzeug.security import generate_password_hash
+from sqlalchemy import text
 
 from db_config import db
-from db_config.db_tables import FlatMate, Preferences, Offer
+from db_config.db_tables import FlatMate, Preferences, Offer, Matches
 from app import app
 
 def create_db():
@@ -1020,44 +1022,17 @@ def create_db():
 
     # Insert FlatMates
     for fm in flatmates_data:
-        db.session.add(FlatMate(**fm))
+        new_flatmate = FlatMate(
+            first_name=fm['first_name'],
+            email=fm['email'],
+            password=generate_password_hash(fm['password']),
+            type=fm['type'],
+        )
+        db.session.add(new_flatmate)
 
     # Insert Preferences
     for pref in preferences_data:
         db.session.add(Preferences(**pref))
-
-
-    # realistic offers
-    csv_file = "realistic_offer_from_flatmates.csv"  # Replace with the actual path to your CSV file
-    df = pd.read_csv(csv_file)
-
-    # Insert data into the SQLAlchemy table
-    for _, row in df.iterrows():
-        new_offer = Offer(
-            id=row['id'],
-            user_id=row['user_id'],
-            title=row['title'],
-            description=row['description'],
-            address=row['address'],
-            price=row['price'],
-            distance=row['distance'],
-            apartment_size=row['apartment_size'],
-            room_size=row['room_size'],
-            roommates=row['roommates'],
-            bathrooms=row['bathrooms'],
-        )
-        db.session.add(new_offer)
-
-    print("Data successfully exported to SQLAlchemy.")
-
-    # Commit changes
-    db.session.commit()
-    return "Data added to database"
-
-def alter_db():
-    app.app_context().push()
-    Offer.query.delete()
-    db.session.commit()
 
     # realistic offers
     csv_file = "realistic_offer_entries.csv"  # Replace with the actual path to your CSV file

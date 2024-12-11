@@ -1,0 +1,1 @@
+# we use celery to run the clustering function asynchronously in order to prevent a server timeout on heroku

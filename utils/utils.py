@@ -1,7 +1,8 @@
+# correct uri for postgresql
 def correct_uri(original_uri):
-    # Checken, ob der String korrekt beginnt
+    # check, whether string starts with "postgres://"
     if original_uri and original_uri.startswith("postgres://"):
-        # Ersetze "postgres://" mit "postgresql://"
+        # replace "postgres://" with "postgresql://"
         corrected_uri = original_uri.replace("postgres://", "postgresql://", 1)
     else:
         raise ValueError("Die DATABASE_URI scheint nicht korrekt zu sein oder fehlt.")

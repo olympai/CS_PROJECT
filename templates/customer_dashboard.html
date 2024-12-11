@@ -124,8 +124,23 @@
                 <div class="property-card">
                     <!-- Property Image -->
                     <div class="property-image">
+                        <!-- Just sampling pictures here because we also sampled the database entries for the offers. In a real-life scenario, here will be real pictures -->
                         <!-- <img src="../static/uploads/offer_{{ property['id'] }}.png" alt="Beautiful Property Image" class="img-fluid"> -->
-                        <img src="../static/uploads/apartment.png" alt="Beautiful Property Image" class="img-fluid">
+                        {% if property['id'] <= 257 %}
+                        {% if property['i'] % 1 == 0 %}
+                        <img src="../static/uploads/apartment_1.png" alt="Beautiful Property Image" class="img-fluid">
+                        {% elif property['i'] % 2 == 0 %}
+                        <img src="../static/uploads/apartment_2.png" alt="Beautiful Property Image" class="img-fluid">
+                        {% elif property['i'] % 3 == 0 %}
+                        <img src="../static/uploads/apartment_3.png" alt="Beautiful Property Image" class="img-fluid">
+                        {% elif property['i'] % 4 == 0 %}
+                        <img src="../static/uploads/apartment_4.png" alt="Beautiful Property Image" class="img-fluid">
+                        {% else %}
+                        <img src="../static/uploads/apartment_5.png" alt="Beautiful Property Image" class="img-fluid">
+                        {% endif %}
+                        {% else %}
+                        <img src="../static/uploads/offer_{{ property['id'] }}.png" alt="Beautiful Property Image" class="img-fluid">
+                        {% endif %}
                     </div>
                     <div class="property-details">
                         <div class="d-flex justify-content-between align-items-center">

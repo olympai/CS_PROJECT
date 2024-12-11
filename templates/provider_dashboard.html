@@ -27,9 +27,12 @@
         <div class="user-card" style="padding: 10px;">
             <!-- User Image -->
             <div class="user-image">
-                <!-- <img src="../static/uploads/user_{{ user['user_id'] }}.png" alt="Beautiful User Image" class="img-fluid"> -->
                 <!-- Just sampling some images here because we also created the users our own. In a real world scenario the uploaded picture of the user will be displayed here -->
+                {% if user['user_id'] <= 500 %}
                 <img {% if user["gender"] == "male" %}src="../static/uploads/man.jpeg"{% else %}src="../static/uploads/woman.jpeg"{% endif %} alt="Beautiful User Image" class="img-fluid">
+                {% else %}
+                <img src="../static/uploads/user_{{ user['user_id'] }}.png" alt="Beautiful User Image" class="img-fluid">
+                {% endif %}
             </div>
             <div class="user-details" style="margin-bottom: 10px;">
                 <h5>{{ user['name'] }}</h5>
