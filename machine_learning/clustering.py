@@ -33,10 +33,12 @@ def clustering_function(session_id):
     df_later = df.copy()
     #replace NaNs with True to avoid errors
     df = df.fillna(True)
+    df.dropna(inplace=True)
+    df.dropnull(inplace=True)
 
-    #  Define features as specified in clustering.ipynb
+    # Define features as specified in clustering.ipynb
     X = pd.get_dummies(df[["semester", "attendance", "fitness"]])
-    #make sure true and false are replaced with 0 and 1
+    # make sure true and false are replaced with 0 and 1
     X = np.where(X == True, 1, X)
     X = np.where(X == False, 0, X)
 
