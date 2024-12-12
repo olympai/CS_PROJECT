@@ -264,8 +264,8 @@
         {
             ctxId: 'squareMetersChart',
             chartType: 'line',
-            labels: [{% for property in properties %}'{{ property["i"] }}'{% if property['i'] < matches['total']  %}, {% endif %}{% endfor %}],
-            data: [{% for property in properties %}{{ property['flat_size'] }}{% if property['i'] < matches['total']  %}, {% endif %}{% endfor %}],
+            labels: [{% for property in properties %}'{{ properties.index(property) }}'{% if properties.index(property) < matches['total']  %}, {% endif %}{% endfor %}],
+            data: [{% for property in properties %}{{ property['flat_size'] }}{% if properties.index(property) < matches['total']  %}, {% endif %}{% endfor %}],
             label: 'Square Meters',
             backgroundColor: 'rgba(54, 162, 235, 0.2)',
             borderColor: 'rgba(54, 162, 235, 1)'
@@ -273,8 +273,8 @@
         {
             ctxId: 'distanceChart',
             chartType: 'line',
-            labels: [{% for property in properties %}'{{ property["i"] }}'{% if property['i'] < matches['total']  %}, {% endif %}{% endfor %}],
-            data: [{% for property in properties %}{{ property['distance'] }}{% if property['i'] < matches['total']  %}, {% endif %}{% endfor %}],
+            labels: [{% for property in properties %}'{{ properties.index(property) }}'{% if properties.index(property) < matches['total']  %}, {% endif %}{% endfor %}],
+            data: [{% for property in properties %}{{ property['distance'] }}{% if properties.index(property) < matches['total']  %}, {% endif %}{% endfor %}],
             label: 'Distance to University (km)',
             backgroundColor: 'rgba(75, 192, 192, 0.2)',
             borderColor: 'rgba(75, 192, 192, 1)'
@@ -282,8 +282,8 @@
         {
             ctxId: 'priceChart',
             chartType: 'line',
-            labels: [{% for property in properties %}'{{ property["i"] }}'{% if property['i'] < matches['total']  %}, {% endif %}{% endfor %}],
-            data: [{% for property in properties %}{{ property['price'] }}{% if property['i'] < matches['total']  %}, {% endif %}{% endfor %}],
+            labels: [{% for property in properties %}'{{ properties.index(property) }}'{% if properties.index(property) < matches['total']  %}, {% endif %}{% endfor %}],
+            data: [{% for property in properties %}{{ property['price'] }}{% if properties.index(property) < matches['total']  %}, {% endif %}{% endfor %}],
             label: 'Price (CHF)',
             backgroundColor: 'rgba(255, 99, 132, 0.2)',
             borderColor: 'rgba(255, 99, 132, 1)'

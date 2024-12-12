@@ -23,9 +23,6 @@ def upload_file(file, id: int, type: str):
         
         # Generate storage path
         filepath = os.path.join(UPLOAD_FOLDER, filename)
-
-        # Create directory if it does not exist
-        # os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
         
         # Save file
         file.save(filepath)

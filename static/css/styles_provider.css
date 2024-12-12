@@ -39,6 +39,8 @@ body {
     margin-bottom: 20px; /* Space between cards */
     overflow: hidden; /* Ensure contents don’t overflow the card */
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Consistent shadow styling */
+    padding: 10px;
+    width: 100%;
 }
 
 .user-card img {
@@ -81,7 +83,12 @@ body {
 .btn-contact:hover {
     background-color: #218838; /* Slightly darker green on hover */
 }
-
+.user-image {
+    width: 25%;
+    border-radius: 50%;
+    margin: 0 auto;
+    display: block;
+}
 
 /* Responsive Design */
 @media (max-width: 768px) {

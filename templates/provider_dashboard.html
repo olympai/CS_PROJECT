@@ -24,7 +24,7 @@
     {% if users %}
     <div class="container">
         {% for user in users %}
-        <div class="user-card" style="padding: 10px;">
+        <div class="user-card">
             <!-- User Image -->
             <div class="user-image">
                 <!-- Just sampling some images here because we also created the users our own. In a real world scenario the uploaded picture of the user will be displayed here -->
@@ -45,6 +45,8 @@
                 <p><strong>Current Semester:</strong> {{ user['semester'] }}</p>
                 <p><strong>Smoking:</strong> {{ user['smoking'] }}</p>
                 <p><strong>Pets:</strong> {{ user['pets'] }}</p>
+                <p><strong>Fitness:</strong> {{ user['fitness'] }}</p>
+                <p><strong>Attendance:</strong> {{ user['attendance'] }}</p>
             </div>
             <a href="/provider_accept?user_id={{ user['user_id'] }}"><button class="apply-btn btn btn-success">Accept</button></a>
             <a href="/provider_reject?user_id={{ user['user_id'] }}"><button class="apply-btn btn btn-danger">Reject</button></a>

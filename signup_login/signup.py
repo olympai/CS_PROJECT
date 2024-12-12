@@ -99,11 +99,15 @@ class Signup:
                     self.apartment[key] = float(item)
                 # Handle image upload later because of offer_id not assigned yet
                 elif key == 'image':
-                    pass
+                    # Handle image upload
+                    error, code = upload_file(self.apartment['image'], self.apartment['id'], 'offer')
+                    if code != 200:
+                        db.session.rollback()
+                        self.error = error
                 else:
                     self.apartment[key] = int(item)
 
-            # delete image key because it is not a column in the preferences table, will be reconstructed synthetically to save storage space
+            # delete image key because it is not a column in the apartment table, will be reconstructed synthetically to save storage space
             del self.apartment['image']
 
             # create a new preference instance
@@ -112,12 +116,6 @@ class Signup:
             # add them to the database
             db.session.add(new_apartment)
             db.session.commit()
-
-            # Handle image upload
-            error, code = upload_file(self.apartment['image'], new_apartment.id, 'offer')
-            if code != 200:
-                db.session.rollback()
-                self.error = error
 
         except Exception as e:
             db.session.rollback()

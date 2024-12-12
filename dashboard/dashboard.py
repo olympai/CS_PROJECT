@@ -33,7 +33,7 @@ def dashboard_1(user_id, selector: int, give_matchings=[]):
         ]
 
     # Initialize match statistics
-    matches['total'] = len(matchings)
+    matches['total'] = len(matchings)-1 # -1 because 0 indexed (for frontend)
     matches['accepted'] = 0
     matches['pending'] = 0
     matches['rejected'] = 0
@@ -76,33 +76,74 @@ def dashboard_1(user_id, selector: int, give_matchings=[]):
             'i': i,  # Serial number
         })
 
+        # Sort the properties:
+        # - First by whether `matching_status` is 'Pending', 'Successful', or 'Rejected' (successful_match != 0).
+        # - Then by `match_score` in descending order.
+        properties = sorted(
+            properties,
+            key=lambda x: (x['matching_status'] == '', -x['match_score'])
+        )
+        print('properties:', properties)
+
     # Render the customer dashboard with properties and match statistics
     return render_template('/customer_dashboard.html', properties=properties, matches=matches)
 
 # The provider dashboard load function
 def dashboard_2(user_id):
-    user = []  # List of matched users
+    users = []
 
     # Get all offers made by the provider
     all_offers = Offer.query.filter_by(user_id=user_id).all()
 
     for offer in all_offers:
         matches = Matches.query.filter(Matches.offer_id == offer.id, Matches.successful_match.in_([1, 2])).all()
+        print('matches:', matches)
 
         for m in matches:  # Process each match
             matched_user = FlatMate.query.filter_by(id=m.user_id).first()
             if matched_user:
                 preferences = Preferences.query.filter_by(user_id=matched_user.id).first()
+                print('preferences:', preferences)
 
-                # Map community preferences to human-readable format
+                # Map preferences to human-readable format
                 social_level = {
-                    1: 'I like keeping to myself most of the time.',
-                    2: 'A mix of hanging out and doing our own thing sounds great.',
-                    3: 'I like to socialize often.'
+                    1: '1 - I like keeping to myself most of the time.',
+                    2: '2 - I prefer occasional social interactions.',
+                    3: '3 - A mix of hanging out and doing our own thing sounds great.',
+                    4: '4 - I enjoy frequent social interactions.',
+                    5: '5 - Let’s hang out and do things together often!'
                 }.get(preferences.community, '')
+                pet_level = {
+                    1: '1 - Not at all comfortable',
+                    2: '2 - Slightly comfortable',
+                    3: '3 - Moderately comfortable',
+                    4: '4 - Very comfortable',
+                    5: '5 - Extremely comfortable'
+                }.get(preferences.pets, '')
+                smoking_level = {
+                    1: '1 - Not at all comfortable',
+                    2: '2 - Slightly comfortable',
+                    3: '3 - Moderately comfortable',
+                    4: '4 - Very comfortable',
+                    5: '5 - Extremely comfortable'
+                }.get(preferences.smoking, '')
+                fitness_level = {
+                    1: '1 - Never',
+                    2: '2 - Rarely',
+                    3: '3 - Occasionally',
+                    4: '4 - Often',
+                    5: '5 - Very frequently'
+                }.get(preferences.fitness, '')
+                attendance_level = {
+                    1: '1 - Never',
+                    2: '2 - Rarely',
+                    3: '3 - Sometimes',
+                    4: '4 - Often',
+                    5: '5 - Always'
+                }.get(preferences.attendance, '')
 
                 # Append user details to the list
-                user.append({
+                users.append({
                     'user_id': matched_user.id,
                     'name': matched_user.first_name,
                     'email': matched_user.email,
@@ -112,12 +153,16 @@ def dashboard_2(user_id):
                     'community': social_level,
                     'degree': 'Master' if preferences.degree else 'Bachelor',
                     'semester': preferences.semester,
-                    'smoking': 'Yes' if preferences.smoking else 'No',
-                    'pets': 'Yes' if preferences.pets else 'No',
+                    'smoking': smoking_level,
+                    'pets': pet_level,
+                    'fitness': fitness_level,
+                    'attendance': attendance_level,
+                    # relationship status let out, this is not a dating app
                 })
+                print('users:', users)
 
     # Render the provider dashboard
-    return render_template('/provider_dashboard.html', user=user)
+    return render_template('/provider_dashboard.html', users=users)
 
 # The filtering function
 def filtering_1(user_id, request):
@@ -128,13 +173,13 @@ def filtering_1(user_id, request):
 
     # Filter offers based on criteria
     offers = Offer.query.filter(
-        Offer.room_size >= min_sq_meters,
+        Offer.apartment_size >= min_sq_meters,
         Offer.distance <= max_distance_to_uni,
         Offer.price <= max_price
     ).all()
 
     # Filter matches by valid offers
-    matches = Matches.query.filter(Matches.offer_id.in_([offer.id for offer in offers])).all()
+    matches = Matches.query.filter(Matches.offer_id.in_([offer.id for offer in offers]), Matches.user_id == user_id).all()
 
     # Create matchings list with scores
     matchings = [
@@ -160,7 +205,8 @@ def matches_1(user_id, request):
 
 # Provider accepts the match
 def accept_1(user_id, request):
-    matched_user_id = request.form.get("user_id")
+    matched_user_id = request.args.get("user_id")
+    print('matched_user_id:', matched_user_id)
     if matched_user_id:
         offer_id = Offer.query.filter_by(user_id=user_id).first().id
         match = Matches.query.filter_by(user_id=matched_user_id, offer_id=offer_id).first()
@@ -171,7 +217,7 @@ def accept_1(user_id, request):
 
 # Provider rejects the match
 def reject_1(user_id, request):
-    matched_user_id = request.form.get("user_id")
+    matched_user_id = request.args.get("user_id")
     if matched_user_id:
         offer_id = Offer.query.filter_by(user_id=user_id).first().id
         match = Matches.query.filter_by(user_id=matched_user_id, offer_id=offer_id).first()
