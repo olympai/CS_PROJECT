@@ -96,5 +96,4 @@ def clustering_function(session_id):
             print('Error: Could not find offer with id ' + str(row['offer_id']))
             continue
     db.session.commit()
-    self.update_state(state='SUCCESS')
     pass
