@@ -7,7 +7,7 @@ from celery.result import AsyncResult
 from factory import app
 from signup_login.login import login_1
 from signup_login.signup import signup_1
-from dashboard.dashboard import dashboard_1, dashboard_2, filtering_1, matches_1, accept_1, reject_1
+from dashboard.dashboard import dashboard_1, dashboard_2, filtering_1, matches_1, accept_1, reject_1, refresh_1
 from celery_setup.celery_config import celery
 
 # ROUTES
@@ -109,7 +109,7 @@ def refresh():
         return redirect('/login')
     # get the user_id from the current flask session
     user_id = session.get('user_id')
-    return dashboard_1(user_id, 1)
+    return refresh_1(user_id)
 
 # Accept from provider
 @app.route('/provider_accept', methods=['GET', 'POST'])

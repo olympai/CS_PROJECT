@@ -225,3 +225,10 @@ def reject_1(user_id, request):
         db.session.commit()
 
     return redirect('/provider_dashboard')
+
+def refresh_1(user_id):
+    # delete old matches to refresh with new ones
+    all_matches = Matches.query.filter_by(user_id=user_id, successful_match=0).all()
+    for match in all_matches:
+        db.session.delete(match)
+    return dashboard_1(user_id, 1)  # Refresh dashboard with updated matches

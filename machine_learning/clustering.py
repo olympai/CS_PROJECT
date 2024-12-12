@@ -77,21 +77,18 @@ def clustering_function(session_id):
     # Add matches to the database 
     this_df = matches_df[matches_df['user_id'] == session_id]
 
-    # delete old matches
-    Matches.query.filter_by(user_id=session_id).delete()
-    db.session.commit()
-
     # add new matches
     for index, row in this_df.iterrows():
         try:
             offer = Offer.query.filter_by(user_id=int(row['offer_id'])).first()
             # append to database
-            new_match = Matches(
-                user_id=session_id,
-                offer_id=offer.id,
-                score=float(row['normalized_matching_score'])
-            )
-            db.session.add(new_match)
+            if not Matches.query.filter_by(user_id=session_id, offer_id=offer.id).first():
+                new_match = Matches(
+                    user_id=session_id,
+                    offer_id=offer.id,
+                    score=float(row['normalized_matching_score'])
+                )
+                db.session.add(new_match)
         except:
             print('Error: Could not find offer with id ' + str(row['offer_id']))
             continue
