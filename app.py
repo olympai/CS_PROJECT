@@ -1,14 +1,12 @@
 # this is the anchor file of our project, everything connects to this place
 # it is the link between backend and frontend
 
-from flask import render_template, request, session, redirect, json
-from celery.result import AsyncResult
+from flask import render_template, request, session, redirect
 
 from factory import app
 from signup_login.login import login_1
 from signup_login.signup import signup_1
 from dashboard.dashboard import dashboard_1, dashboard_2, filtering_1, matches_1, accept_1, reject_1, refresh_1
-from celery_setup.celery_config import celery
 
 # ROUTES
 
@@ -130,49 +128,6 @@ def provider_reject():
     # get the user_id from the current flask session
     user_id = session.get('user_id')
     return reject_1(user_id, request)
-
-@app.route('/progress')
-def progress():
-    if not session.get('user_id'):
-        return render_template('login.html')
-    jobid = request.values.get('jobid')
-    if jobid:
-        job = AsyncResult(jobid, app=celery)
-        print(job.state)
-        print(job.result)
-        if job.state == 'PENDING':
-            return json.dumps(dict(
-                state=job.state,
-                progress=0,
-            ))
-        elif job.state == 'PROGRESS':
-            try:
-                if job.result['total'] and job.result['current']:
-                    pass
-                else:
-                    job.result['total']=1
-                    job.result['current']=1
-            except:
-                return json.dumps(dict(
-                    state=job.state,
-                    progress=100,
-                ))
-            try:
-                return json.dumps(dict(
-                    state=job.state,
-                    progress=(job.result['current'] * 1.0 / job.result['total'])*100,
-                ))
-            except:
-                return json.dumps(dict(
-                    state=job.state,
-                    progress=100,
-                ))
-        elif job.state == 'SUCCESS':
-            return json.dumps(dict(
-                state=job.state,
-                progress=100,
-            ))
-    return '{}'
 
 # run the app
 if __name__ == '__main__':
