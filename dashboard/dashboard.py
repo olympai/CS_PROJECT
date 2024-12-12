@@ -3,7 +3,7 @@ from datetime import datetime
 
 from db_config import db
 from db_config.db_tables import Matches, Offer, FlatMate, Preferences
-from machine_learning.clustering import clustering_function
+from celery_setup.celery_config import async_clustering_function
 
 # The customer dashboard load function
 def dashboard_1(user_id, selector: int, give_matchings=[]):
@@ -18,7 +18,7 @@ def dashboard_1(user_id, selector: int, give_matchings=[]):
     # Determine action based on the selector value
     if selector == 1:  # Case 1: Perform clustering for the user
         try:
-            job = clustering_function.apply_async(queue='alpha', args=(user_id,))
+            job = async_clustering_function.apply_async(queue='alpha', args=(user_id,))
             return render_template('progress.html', JOBID=job.id)
         except Exception as e:
             print(f"An error occurred while clustering: {str(e)}")  # Log clustering errors

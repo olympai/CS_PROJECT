@@ -8,8 +8,6 @@ from sklearn.preprocessing import MinMaxScaler
 from db_config import db
 from db_config.db_tables import Matches, Offer
 # import celery app as asynchronous backend
-from factory import app
-from celery_setup.celery_config import celery as current_app
 
 # Initialize empty lists for matchings and matching scores
 matchings = []
@@ -23,9 +21,7 @@ def calculate_matching_score(df, user1, user2):
     return euclidean(user1_preferences, user2_preferences)
 
 # define clustering function 
-@current_app.task(bind=True)
-def clustering_function(self, session_id):
-    app.app_context().push()
+def clustering_function(session_id):
     df = pd.read_sql('SELECT * FROM preferences p JOIN flatmate f ON p.user_id = f.id WHERE f.type = TRUE', db.engine)
     # add the current user
     df_additional = pd.read_sql(f'SELECT * FROM preferences p JOIN flatmate f ON p.user_id = f.id WHERE f.id = {session_id}', db.engine)
