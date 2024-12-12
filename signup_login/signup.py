@@ -45,7 +45,7 @@ class Signup:
     def add_preferences(self):
         try:
             # add the user_id to the preferences
-            self.preferences['user_id'] = FlatMate.query.filter_by(email=self.email).first().id
+            self.preferences['user_id'] = session.get('user_id')
 
             # transform a dictionary in kwargs value pairs
             for key, item in self.preferences.items():
@@ -89,7 +89,7 @@ class Signup:
             self.apartment['id'] = last_offer.id + 1
 
             # add the user_id to the apartment
-            self.apartment['user_id'] = FlatMate.query.filter_by(email=self.email).first().id
+            self.apartment['user_id'] = session.get('user_id')
 
             # transform a dictionary in kwargs value pairs
             for key, item in self.apartment.items():
@@ -137,7 +137,6 @@ class Signup:
                 new_user = FlatMate(id=last_user.id+1, first_name=self.first_name, email=self.email, password=hashed_password, type=self.type)
                 # add the new entry to the database
                 db.session.add(new_user)
-                db.session.commit()
                 # set session variable
                 session['user_id'] = new_user.id
                 # add the preferences
@@ -145,6 +144,7 @@ class Signup:
                 # if provider add the apartment details
                 if self.type:
                     self.add_apartment()
+                db.session.commit()
                 # error handling
                 if self.error:
                     print('signup error:', self.error)

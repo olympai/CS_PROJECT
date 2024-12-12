@@ -18,6 +18,8 @@ matching_score = 0
 def calculate_matching_score(df, user1, user2):
     user1_preferences = df[df['user_id'] == user1].drop(['user_id'], axis=1).apply(pd.to_numeric, errors='coerce').fillna(0).values.flatten()
     user2_preferences = df[df['user_id'] == user2].drop(['user_id'], axis=1).apply(pd.to_numeric, errors='coerce').fillna(0).values.flatten()
+    print(user1_preferences)
+    print(user2_preferences)
     return euclidean(user1_preferences, user2_preferences)
 
 # define clustering function 
